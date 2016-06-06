@@ -15,6 +15,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="StarLib" />
     <orderEntry type="module" module-name="FollowApp" />
+    <orderEntry type="library" name="libjson" level="project" />
   </component>
 </module>
-
