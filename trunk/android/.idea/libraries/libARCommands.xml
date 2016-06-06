@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="libARCommands">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARCommands.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARDiscovery.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARNetwork.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARNetworkAL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARSAL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/jmdns.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARCommands.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARDiscovery.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARNetwork.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARNetworkAL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARSAL.jar!/" />
+    </SOURCES>
+  </library>
+</component>

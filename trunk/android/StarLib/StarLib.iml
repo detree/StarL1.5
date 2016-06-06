@@ -15,15 +15,33 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/android-support-v4.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/jmdns.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARCommands.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARDiscovery.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARNetwork.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARNetworkAL.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARSAL.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/kd.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/lib/kd.jar!/edu/wlu/cs/levy/CG/docs" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/libARCommands.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARDiscovery.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARNetwork.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARNetworkAL.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/libARSAL.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/kd.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="kd" level="project" />
-    <orderEntry type="library" name="android-support-v4" level="project" />
-    <orderEntry type="library" name="jmdns" level="project" />
     <orderEntry type="library" name="libARCommands" level="project" />
-    <orderEntry type="library" name="libARDiscovery" level="project" />
-    <orderEntry type="library" name="libARNetwork" level="project" />
-    <orderEntry type="library" name="libARNetworkAL" level="project" />
-    <orderEntry type="library" name="libjson" level="project" />
-    <orderEntry type="library" name="libARSAL" level="project" />
+    <orderEntry type="library" name="jmdns" level="project" />
   </component>
 </module>
-

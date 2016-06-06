@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/StarLApps/FollowApp/FollowApp.iml" filepath="$PROJECT_DIR$/StarLApps/FollowApp/FollowApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LightPaintAndroidApp/LightPaintApp.iml" filepath="$PROJECT_DIR$/LightPaintAndroidApp/LightPaintApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LightPaintLibrary/LightPaintLibrary.iml" filepath="$PROJECT_DIR$/LightPaintLibrary/LightPaintLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LightPaintApp/LightPaintNew.iml" filepath="$PROJECT_DIR$/LightPaintApp/LightPaintNew.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StarLSim/StarLSim.iml" filepath="$PROJECT_DIR$/StarLSim/StarLSim.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StarLib/StarLib.iml" filepath="$PROJECT_DIR$/StarLib/StarLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StarlAndroidTemplate/StarlTemplate.iml" filepath="$PROJECT_DIR$/StarlAndroidTemplate/StarlTemplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/android.iml" filepath="$PROJECT_DIR$/.idea/android.iml" />
+    </modules>
+  </component>
+</project>
