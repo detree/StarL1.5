@@ -36,7 +36,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
 
     public String ipAddr;
     public IARDrone droneInstance;
-    private CommandManager cmd;
+    public CommandManager cmd;//TODO: re-encapsulate this thing
     private NavDataManager nav;
     //the position/velocity/status information
     //angular velocity in radius/second, regular velocity in meter/second
