@@ -270,7 +270,7 @@ public class MotionAutomaton_quadcopter extends RobotMotion {
 			return value/max_value;
 		}
 	}
-
+//TODO: change this func to integrate the hardware control.
 	protected void setControlInput(double yaw_v, double pitch, double roll, double gaz){
 		if(yaw_v > 1 || yaw_v < -1){
 			throw new IllegalArgumentException("yaw speed must be between -1 to 1");
