@@ -9,7 +9,7 @@ import java.util.Vector;
 import edu.illinois.mitra.starl.comms.SmartUdpComThread;
 import edu.illinois.mitra.starl.comms.UdpGpsReceiver;
 import edu.illinois.mitra.starl.interfaces.TrackedRobot;
-import edu.illinois.mitra.starl.models.Model_ARDrone2;
+import edu.illinois.mitra.starl.models.ModelARDrone2;
 import edu.illinois.mitra.starl.models.Model_iRobot;
 import edu.illinois.mitra.starl.models.Model_quadcopter;
 import edu.illinois.mitra.starl.motion.BluetoothInterface;
@@ -53,7 +53,7 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
             plat.moat = new MotionAutomatonMiniDrone(this, new MiniDroneBTI(this, context, robotMac));
         }
 
-		else if (initpos instanceof Model_ARDrone2){
+		else if (initpos instanceof ModelARDrone2){
 			plat.moat = new MotionAutomation_ARDrone2()
 		}
 /*
