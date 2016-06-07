@@ -5,7 +5,7 @@ import java.util.HashMap;
 import edu.illinois.mitra.starl.harness.IdealSimGpsProvider;
 import edu.illinois.mitra.starl.harness.IdealSimMotionAutomaton;
 import edu.illinois.mitra.starl.harness.RealisticSimMotionAutomaton_iRobot;
-import edu.illinois.mitra.starl.harness.RealisticSimMotionAutomaton_ARDrone2;
+import edu.illinois.mitra.starl.harness.RealisticSimMotionAutomation_ARDrone2;
 import edu.illinois.mitra.starl.harness.SimGpsReceiver;
 import edu.illinois.mitra.starl.harness.SimSmartComThread;
 import edu.illinois.mitra.starl.harness.SimulationEngine;
@@ -52,7 +52,7 @@ public class SimGlobalVarHolder extends GlobalVarHolder {
 			}
 		}
 		else if(initpos instanceof Model_quadcopter){
-			plat.moat = new RealisticSimMotionAutomaton_ARDrone2(this, engine.getGps());
+			plat.moat = new RealisticSimMotionAutomation_ARDrone2(this, engine.getGps());
 			plat.moat.start();
 		}
 		else {

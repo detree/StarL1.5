@@ -18,7 +18,7 @@ import edu.illinois.mitra.starl.objects.*;
  * @author Yixiao Lin
  * @version 1.0
  */
-public class MotionAutomaton_ARDrone2 extends RobotMotion {
+public class MotionAutomation_ARDrone2 extends RobotMotion {
 	protected static final String TAG = "MotionAutomaton";
 	protected static final String ERR = "Critical Error";
 	final int safeHeight = 500;
@@ -55,7 +55,7 @@ public class MotionAutomaton_ARDrone2 extends RobotMotion {
 
 	//	private volatile MotionParameters param = settings.build();
 
-	public MotionAutomaton_ARDrone2(GlobalVarHolder gvh, BluetoothInterface bti) {
+	public MotionAutomation_ARDrone2(GlobalVarHolder gvh, BluetoothInterface bti) {
 		super(gvh.id.getName());
 		this.gvh = gvh;
 		this.bti = bti;
