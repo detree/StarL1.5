@@ -65,12 +65,28 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
             throw new ItemFormattingException("Should be length 10, is length " + parts.length);
         }
         initHelper();
-        droneInstance = new ARDrone(ipAddr, null);
-        cmd = droneInstance.getCommandManager();
-        nav = droneInstance.getNavDataManager();
+    }
+
+    public ModelARDrone2(String name, int x, int y){
+        super(name, x, y, 0);
+        this.currYaw = 0;
+        this.currPitch = 0;
+        this.currRoll = 0;
+        initHelper();
+    }
+
+    public ModelARDrone2(String name, int x, int y, int z){
+        super(name, x, y, z);
+        this.currYaw = 0;
+        this.currPitch = 0;
+        this.currRoll = 0;
+        initHelper();
     }
 
     private void initHelper(){
+        droneInstance = new ARDrone(ipAddr, null);
+        cmd = droneInstance.getCommandManager();
+        nav = droneInstance.getNavDataManager();
         vX=0;
         vY=0;
         vZ=0;
