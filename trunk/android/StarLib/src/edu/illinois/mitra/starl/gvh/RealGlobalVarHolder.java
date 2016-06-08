@@ -54,7 +54,7 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
         }
 
 		else if (initpos instanceof ModelARDrone2){
-			plat.moat = new MotionAutomation_ARDrone2();
+			plat.moat = new MotionAutomation_ARDrone2(this);
 		}
 /*
 //TD_NATHAN: resolve - resolved above
