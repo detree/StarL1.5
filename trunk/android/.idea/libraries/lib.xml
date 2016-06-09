@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARNetworkAL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/kd.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/yadrone_032.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libjson.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/android-support-v4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARCommands.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARNetwork.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARSAL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARDiscovery.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/lib/jmdns.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
