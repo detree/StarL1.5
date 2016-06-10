@@ -1,1 +1,1 @@
-include ':ardronestarltest'
+include ':ardronestarltest', ':StarLib', ':StarLSim'
