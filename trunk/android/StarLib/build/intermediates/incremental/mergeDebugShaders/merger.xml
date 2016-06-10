@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/SC/Documents/StarL/starl_dev/trunk/android/StarLib/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/Users/SC/Documents/StarL/starl_dev/trunk/android/StarLib/src/debug/shaders"/></dataSet></merger>
