@@ -8,7 +8,7 @@ buildscript {
     }
 }
 
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
@@ -22,7 +22,23 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+        }
+
+        /**
+         * The 'initWith' property allows you to copy configurations from other build types,
+         * so you don't have to configure one from the beginning. You can then configure
+         * just the settings you want to change. The following line initializes
+         * 'jnidebug' using the debug build type, and changes only the
+         * applicationIdSuffix and versionNameSuffix settings.
+         */
+
+        jnidebug {
+
+            // This copies the debuggable attribute and debug signing configurations.
+            initWith debug
+
+            jniDebuggable true
         }
     }
     productFlavors {
@@ -31,16 +47,27 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile files('lib/android-support-v4.jar')
-    compile files('lib/jmdns.jar')
-    compile files('lib/kd.jar')
-    compile files('lib/libARCommands.jar')
-    compile files('lib/libARDiscovery.jar')
-    compile files('lib/libARNetwork.jar')
-    compile files('lib/libARNetworkAL.jar')
-    compile files('lib/libARSAL.jar')
-    compile files('lib/libjson.jar')
-    compile files('lib/yadrone_032.jar')
+    compile files('libs/android-support-v4.jar')
+    compile files('libs/jmdns.jar')
+    compile files('libs/kd.jar')
+    compile files('libs/libARCommands.jar')
+    compile files('libs/libARDiscovery.jar')
+    compile files('libs/libARNetwork.jar')
+    compile files('libs/libARNetworkAL.jar')
+    compile files('libs/libARSAL.jar')
+    compile files('libs/libjson.jar')
+    compile files('libs/yadrone_032.jar')
 }
 
+task deleteJar(type: Delete){
+    delete 'libs/StarLibGen.jar'
+}
 
+task createJar(type: Copy){
+    from('build/intermediates/bundles/release/')
+    into('libs/')
+    include('class.jar')
+    rename('class.jar', 'StarLibGen.jar')
+}
+
+createJar.dependsOn(deleteJar, build)

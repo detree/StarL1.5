@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="jmdns">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/StarLib/lib/jmdns.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/libs/jmdns.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

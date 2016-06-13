@@ -12,7 +12,7 @@
             <option value="$PROJECT_DIR$/StarLSim" />
             <option value="$PROJECT_DIR$/StarLib" />
             <option value="$PROJECT_DIR$/ardronestarltest" />
-            <option value="$PROJECT_DIR$/testjavalib" />
+            <option value="$PROJECT_DIR$/mylibrary" />
           </set>
         </option>
         <option name="myModules">
@@ -22,7 +22,7 @@
             <option value="$PROJECT_DIR$/StarLSim" />
             <option value="$PROJECT_DIR$/StarLib" />
             <option value="$PROJECT_DIR$/ardronestarltest" />
-            <option value="$PROJECT_DIR$/testjavalib" />
+            <option value="$PROJECT_DIR$/mylibrary" />
           </set>
         </option>
       </GradleProjectSettings>

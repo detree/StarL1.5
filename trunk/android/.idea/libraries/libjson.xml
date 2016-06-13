@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="libjson">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/StarLib/lib/libjson.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/libs/libjson.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

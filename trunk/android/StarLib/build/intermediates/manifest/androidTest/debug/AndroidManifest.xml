@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.illinois.mitra.starl.test">
+    package="edu.illinois.mitra.starl.debug.test">
 
     <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="23" />
 
@@ -9,8 +9,8 @@
     </application>
 
     <instrumentation android:name="android.test.InstrumentationTestRunner"
-                     android:targetPackage="edu.illinois.mitra.starl"
+                     android:targetPackage="edu.illinois.mitra.starl.debug"
                      android:handleProfiling="false"
                      android:functionalTest="false"
-                     android:label="Tests for edu.illinois.mitra.starl"/>
+                     android:label="Tests for edu.illinois.mitra.starl.debug"/>
 </manifest>

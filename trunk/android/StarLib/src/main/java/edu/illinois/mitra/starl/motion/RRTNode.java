@@ -1,6 +1,8 @@
 package edu.illinois.mitra.starl.motion;
 
-import java.awt.Point;
+
+import android.graphics.Point;
+
 import java.util.Stack;
 
 import edu.illinois.mitra.starl.objects.ItemPosition;

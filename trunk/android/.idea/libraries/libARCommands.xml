@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="libARCommands">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARCommands.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/libs/libARCommands.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

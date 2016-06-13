@@ -3,6 +3,8 @@ manifest
 ADDED from /Users/SC/Documents/StarL/starl_dev/trunk/android/StarLib/src/main/AndroidManifest.xml:2:1-26:12
 	package
 		ADDED from /Users/SC/Documents/StarL/starl_dev/trunk/android/StarLib/src/main/AndroidManifest.xml:3:5-39
+		INJECTED from /Users/SC/Documents/StarL/starl_dev/trunk/android/StarLib/src/main/AndroidManifest.xml
+		INJECTED from /Users/SC/Documents/StarL/starl_dev/trunk/android/StarLib/src/main/AndroidManifest.xml
 	android:versionName
 		ADDED from /Users/SC/Documents/StarL/starl_dev/trunk/android/StarLib/src/main/AndroidManifest.xml:5:5-30
 		INJECTED from /Users/SC/Documents/StarL/starl_dev/trunk/android/StarLib/src/main/AndroidManifest.xml

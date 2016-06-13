@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="libARSAL">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/StarLib/lib/libARSAL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/StarLib/libs/libARSAL.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
