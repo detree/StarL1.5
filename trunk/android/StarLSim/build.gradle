@@ -1,14 +1,10 @@
 apply plugin: 'java'
-apply plugin: 'idea'
 
-version = '1.0'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
+    compile project(':StarLib')
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //compile 'com.android.support:appcompat-v7:23.4.0'
+    compile files('libs/gson-2.2.2.jar')
 }
 

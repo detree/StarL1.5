@@ -8,17 +8,21 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/StarLApps/FollowApp" />
             <option value="$PROJECT_DIR$/StarLSim" />
             <option value="$PROJECT_DIR$/StarLib" />
             <option value="$PROJECT_DIR$/ardronestarltest" />
+            <option value="$PROJECT_DIR$/testjavalib" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/StarLApps/FollowApp" />
             <option value="$PROJECT_DIR$/StarLSim" />
             <option value="$PROJECT_DIR$/StarLib" />
             <option value="$PROJECT_DIR$/ardronestarltest" />
+            <option value="$PROJECT_DIR$/testjavalib" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -30,7 +30,17 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'lib')
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile files('lib/android-support-v4.jar')
+    compile files('lib/jmdns.jar')
+    compile files('lib/kd.jar')
+    compile files('lib/libARCommands.jar')
+    compile files('lib/libARDiscovery.jar')
+    compile files('lib/libARNetwork.jar')
+    compile files('lib/libARNetworkAL.jar')
+    compile files('lib/libARSAL.jar')
+    compile files('lib/libjson.jar')
+    compile files('lib/yadrone_032.jar')
 }
+
 

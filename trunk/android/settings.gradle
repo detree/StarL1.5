@@ -1,1 +1,2 @@
-include ':ardronestarltest', ':StarLib', ':StarLSim'
+include ':ardronestarltest', ':StarLib', ':StarLSim', ':FollowApp', ':testjavalib'
+project(':FollowApp').projectDir = new File('StarLApps/FollowApp')
