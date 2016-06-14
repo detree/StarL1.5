@@ -1,7 +1,7 @@
 trunk/android/html/
 
 # Built application files
-**/build
+trunk/android/StarLib/build
 
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
@@ -16,7 +16,7 @@ trunk/android/**/.gradle
 trunk/android/**/.signing
 
 # User-specific configurations
-trunk/android/**/.idea/libraries/
+trunk/android/**/.idea/libraries/**
 trunk/android/**/.idea/workspace.xml
 trunk/android/**/.idea/tasks.xml
 #.idea/.name
@@ -27,8 +27,8 @@ trunk/android/**/.idea/tasks.xml
 #.idea/modules.xml
 #.idea/scopes/scope_settings.xml
 #.idea/vcs.xml
-**/production/
-**/test/
+trunk/android/**/production/
+trunk/android/**/test/
 
 
 # OS-specific files

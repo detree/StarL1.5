@@ -11,11 +11,8 @@ import edu.illinois.mitra.starl.comms.UdpGpsReceiver;
 import edu.illinois.mitra.starl.interfaces.TrackedRobot;
 import edu.illinois.mitra.starl.models.ModelARDrone2;
 import edu.illinois.mitra.starl.models.Model_iRobot;
-import edu.illinois.mitra.starl.models.Model_quadcopter;
 import edu.illinois.mitra.starl.motion.BluetoothInterface;
-import edu.illinois.mitra.starl.motion.MiniDroneBTI;
 import edu.illinois.mitra.starl.motion.MotionAutomation_ARDrone2;
-import edu.illinois.mitra.starl.motion.MotionAutomatonMiniDrone;
 import edu.illinois.mitra.starl.motion.MotionAutomaton_iRobot;
 import edu.illinois.mitra.starl.motion.ReachAvoid;
 import edu.illinois.mitra.starl.objects.ObstacleList;
@@ -49,9 +46,9 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
             plat.moat = new MotionAutomaton_iRobot(this, new BluetoothInterface(this, robotMac.trim()));
         }
 
-        else if (initpos instanceof Model_quadcopter) {
+        /*else if (initpos instanceof Model_quadcopter) {
             plat.moat = new MotionAutomatonMiniDrone(this, new MiniDroneBTI(this, context, robotMac));
-        }
+        }*/
 
 		else if (initpos instanceof ModelARDrone2){
 			plat.moat = new MotionAutomation_ARDrone2(this);

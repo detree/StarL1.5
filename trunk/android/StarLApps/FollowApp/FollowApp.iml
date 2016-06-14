@@ -31,13 +31,9 @@
     <orderEntry type="library" exported="" name="android-support-v4" level="project" />
     <orderEntry type="library" exported="" name="jmdns" level="project" />
     <orderEntry type="library" exported="" name="kd" level="project" />
-    <orderEntry type="library" exported="" name="libARCommands" level="project" />
-    <orderEntry type="library" exported="" name="libARDiscovery" level="project" />
-    <orderEntry type="library" exported="" name="libARNetwork" level="project" />
-    <orderEntry type="library" exported="" name="libARNetworkAL" level="project" />
-    <orderEntry type="library" exported="" name="libARSAL" level="project" />
-    <orderEntry type="library" exported="" name="libjson" level="project" />
     <orderEntry type="library" exported="" name="yadrone_032" level="project" />
     <orderEntry type="library" exported="" name="gson-2.2.2" level="project" />
+    <orderEntry type="library" exported="" name="StarLibGen" level="project" />
+    <orderEntry type="library" exported="" name="FollowApp.FollowApp-1.0" level="project" />
   </component>
 </module>

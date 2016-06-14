@@ -46,19 +46,20 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    //compile 'com.android.support:appcompat-v7:23.4.0'
     compile files('libs/android-support-v4.jar')
     compile files('libs/jmdns.jar')
     compile files('libs/kd.jar')
-    compile files('libs/libARCommands.jar')
-    compile files('libs/libARDiscovery.jar')
-    compile files('libs/libARNetwork.jar')
-    compile files('libs/libARNetworkAL.jar')
-    compile files('libs/libARSAL.jar')
-    compile files('libs/libjson.jar')
+    //compile files('libs/libARCommands.jar')
+    //compile files('libs/libARDiscovery.jar')
+    //compile files('libs/libARNetwork.jar')
+    //compile files('libs/libARNetworkAL.jar')
+    //compile files('libs/libARSAL.jar')
+    //compile files('libs/libjson.jar')
     compile files('libs/yadrone_032.jar')
 }
 
+/*
 task deleteJar(type: Delete){
     delete 'libs/StarLibGen.jar'
 }
@@ -70,4 +71,4 @@ task createJar(type: Copy){
     rename('class.jar', 'StarLibGen.jar')
 }
 
-createJar.dependsOn(deleteJar, build)
+createJar.dependsOn(deleteJar, build)*/
