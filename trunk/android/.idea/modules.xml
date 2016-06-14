@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/StarLApps/FollowApp/FollowApp.iml" filepath="$PROJECT_DIR$/StarLApps/FollowApp/FollowApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/StarLSim/StarLSim.iml" filepath="$PROJECT_DIR$/StarLSim/StarLSim.iml" />
       <module fileurl="file://$PROJECT_DIR$/StarLib/StarLib.iml" filepath="$PROJECT_DIR$/StarLib/StarLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StarlAndroidTemplate/StarlAndroidTemplate.iml" filepath="$PROJECT_DIR$/StarlAndroidTemplate/StarlAndroidTemplate.iml" />
       <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" />
       <module fileurl="file://$PROJECT_DIR$/ardronestarltest/ardronestarltest.iml" filepath="$PROJECT_DIR$/ardronestarltest/ardronestarltest.iml" />
     </modules>

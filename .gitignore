@@ -1,7 +1,7 @@
 trunk/android/html/
 
 # Built application files
-trunk/android/StarLib/build
+trunk/android/**/build
 
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
@@ -39,3 +39,5 @@ trunk/android/**/test/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+*.swp

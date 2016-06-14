@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ARDroneStarLTest</string>
+    <string name="button_start">Start</string>
 </resources>
