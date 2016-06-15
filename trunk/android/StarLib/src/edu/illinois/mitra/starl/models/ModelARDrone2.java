@@ -108,7 +108,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
             nav.addAttitudeListener(new ARDrone2_AttitudeListn(this.name));
             droneInstance.setSpeed(maxSpeed);
             cmd.setOutdoor(outdoor, outdoor);
-            cmd.setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10);//some sig for us
+            cmd.setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10).doFor(3000);//some sig for us
         }catch (Exception exc)
         {
             exc.printStackTrace();
