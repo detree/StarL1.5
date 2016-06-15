@@ -1,5 +1,7 @@
 package edu.illinois.mitra.starl.motion;
 
+import android.util.Log;
+
 import de.yadrone.base.command.CommandManager;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.models.ModelARDrone2;
@@ -35,7 +37,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     public MotionAutomation_ARDrone2(GlobalVarHolder gvhin){
         super(gvhin.id.getName());
         gvh = gvhin;
-        cmd = ((ModelARDrone2)gvh.plat.getModel()).cmd;
     }
 
     public void setParameters(MotionParameters param){
@@ -51,6 +52,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     }
 
     public void goTo(ItemPosition dest) {
+        Log.i("Automation ARDrone2", "GoTo called!!!");
         if((inMotion && !this.dest.equals(dest)) || !inMotion) {
             done = false;
             this.dest = new ItemPosition(dest.name,dest.x,dest.y,dest.z);
@@ -92,7 +94,10 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         gvh.threadCreated(this);
         while(true){
             if(!running) continue;
-            int distance = (int) Math.sqrt(Math.pow((mypos.x - dest.x),2) + Math.pow((mypos.y - dest.y), 2));
+            Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
+            int distance = 0;
+            if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF)
+                distance = (int) Math.sqrt(Math.pow((mypos.x - dest.x),2) + Math.pow((mypos.y - dest.y), 2));
             if(colliding) continue;
             switch (stage){
                 case INIT:
@@ -157,10 +162,31 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     public synchronized void start() {
         mypos = (ModelARDrone2) gvh.plat.getModel();
         mypos.initialize();
+        cmd = ((ModelARDrone2)gvh.plat.getModel()).cmd;
+        running = true;
         super.start();
         gvh.log.d(TAG, "STARTED!");
     }
 
-
+    private String StageToString(STAGE curr)
+    {
+        switch (curr){
+            case INIT:
+                return "INIT";
+            case MOVE:
+                return "MOVE";
+            case HOVER:
+                return "HOVER";
+            case TAKEOFF:
+                return "TAKEOFF";
+            case LAND:
+                return "LAND";
+            case GOAL:
+                return "GOAL";
+            case STOP:
+                return "STOP";
+        }
+        return "UNKNOWN";
+    }
 
 }
