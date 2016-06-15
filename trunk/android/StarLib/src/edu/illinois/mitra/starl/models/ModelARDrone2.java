@@ -84,6 +84,8 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
     }
 
     private void initHelper(){
+        if(this.ipAddr==null)
+            this.ipAddr = "192.168.1.1";
         droneInstance = new ARDrone(ipAddr, null);
         vX=0;
         vY=0;
@@ -98,6 +100,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
     @Override
     public void initialize(){
         try{
+            Log.i("Model ARDrone2", "initialization called");
             droneInstance.reset();
             droneInstance.start();
             cmd = droneInstance.getCommandManager();

@@ -59,7 +59,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     }
 
     //====================================================
-    //this three func seems like need some commands toward the HW, but not sure yet.
+    //fixme: this three func seems like need some commands toward the HW, but not sure yet.
     private void motionStart(){
         running = true;
         stage = STAGE.INIT;
@@ -92,7 +92,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         gvh.threadCreated(this);
         while(true){
             if(!running) continue;
-            mypos = (ModelARDrone2) gvh.plat.getModel();
             int distance = (int) Math.sqrt(Math.pow((mypos.x - dest.x),2) + Math.pow((mypos.y - dest.y), 2));
             if(colliding) continue;
             switch (stage){
@@ -156,6 +155,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     @Override
     public synchronized void start() {
+        mypos = (ModelARDrone2) gvh.plat.getModel();
+        mypos.initialize();
         super.start();
         gvh.log.d(TAG, "STARTED!");
     }
