@@ -56,15 +56,7 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 		else if (initpos instanceof ModelARDrone2){
 			plat.moat = new MotionAutomation_ARDrone2(this);
 		}
-/*
-//TD_NATHAN: resolve - resolved above
-        if(type == Common.IROBOT) {
-            plat.moat = new MotionAutomaton(this, new BluetoothInterface(this, robotMac.trim()));
-        }
-        else if(type == Common.MINIDRONE) {
-            plat.moat = new MotionAutomatonMiniDrone(this, new MiniDroneBTI(this, context, robotMac));
-        }
-*/
+
 		plat.moat.start();
 	}
 

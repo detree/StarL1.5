@@ -44,7 +44,9 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 	private String name = null;
 	private boolean received = false;
 
-	public UdpGpsReceiver(GlobalVarHolder gvh,String hostname, int port, PositionList robotPositions, PositionList<ItemPosition> waypointPositions, ObstacleList obs, Vector<ObstacleList> viewsOfWorld) {
+	public UdpGpsReceiver(GlobalVarHolder gvh,String hostname, int port, PositionList robotPositions,
+						  PositionList<ItemPosition> waypointPositions, ObstacleList obs,
+						  Vector<ObstacleList> viewsOfWorld) {
 		super();
 		this.gvh = gvh;
 		

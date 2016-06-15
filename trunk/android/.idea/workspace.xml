@@ -28,14 +28,44 @@
     <favorites_list name="android" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
+    <splitter split-orientation="horizontal" split-proportion="0.50824875">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="FollowApp.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="FollowApp.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/StarLApps/FollowApp/src/edu/illinois/mitra/demo/follow/FollowApp.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.09414226">
-                  <caret line="60" column="12" selection-start-line="60" selection-start-column="12" selection-end-line="60" selection-end-column="12" />
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="91" column="32" selection-start-line="91" selection-start-column="32" selection-end-line="91" selection-end-column="32" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="MotionAutomaton_iRobot.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomaton_iRobot.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="185" column="59" selection-start-line="185" selection-start-column="59" selection-end-line="185" selection-end-column="59" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="RealGlobalVarHolder.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/RealGlobalVarHolder.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="44" column="26" selection-start-line="44" selection-start-column="26" selection-end-line="44" selection-end-column="26" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="UdpGpsReceiver.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/comms/UdpGpsReceiver.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="1.5062761">
+                  <caret line="115" column="52" selection-start-line="115" selection-start-column="52" selection-end-line="115" selection-end-column="52" />
                   <folding />
                 </state>
               </provider>
@@ -45,7 +75,27 @@
             <entry file="file://$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/RobotsActivity.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="98" column="46" selection-start-line="98" selection-start-column="46" selection-end-line="98" selection-end-column="46" />
+                  <caret line="128" column="29" selection-start-line="128" selection-start-column="29" selection-end-line="128" selection-end-column="29" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="MainHandler.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/MainHandler.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="57" column="14" selection-start-line="57" selection-start-column="14" selection-end-line="57" selection-end-column="14" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Gps.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/Gps.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="63" column="35" selection-start-line="63" selection-start-column="35" selection-end-line="63" selection-end-column="35" />
                   <folding />
                 </state>
               </provider>
@@ -55,13 +105,26 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="ModelARDrone2.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="ModelARDrone2.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/models/ModelARDrone2.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.41945606">
-                  <caret line="111" column="29" selection-start-line="111" selection-start-column="29" selection-end-line="111" selection-end-column="29" />
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="38" column="16" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="16" />
                   <folding>
                     <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="MotionAutomation_ARDrone2.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomation_ARDrone2.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="1.7531381">
+                  <caret line="162" column="11" selection-start-line="162" selection-start-column="11" selection-end-line="162" selection-end-column="11" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                    <element signature="method#StageToString#0;class#MotionAutomation_ARDrone2#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -94,13 +157,15 @@
         <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/models/ARDrone2_AltitudeListn.java" />
         <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/models/ARDrone2_AttitudeListn.java" />
         <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomation_quadcopter.java" />
-        <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/RealGlobalVarHolder.java" />
         <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/objects/Common.java" />
         <option value="$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/BotInfoSelector.java" />
         <option value="$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/RobotsActivity_back.java" />
         <option value="$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/RobotsActivity.java" />
         <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomation_ARDrone2.java" />
         <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/models/ModelARDrone2.java" />
+        <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/RealGlobalVarHolder.java" />
+        <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/comms/UdpGpsReceiver.java" />
+        <option value="$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomaton_iRobot.java" />
       </list>
     </option>
   </component>
@@ -403,7 +468,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="device.picker.selection" value="HT41NW903181" />
+    <property name="device.picker.selection" value="Nexus_4_API_23" />
     <property name="FullScreen" value="true" />
   </component>
   <component name="RecentsManager">
@@ -784,12 +849,12 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32825205" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973376" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16080937" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16021505" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15974441" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -849,35 +914,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/BluetoothCommands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LightPaintAndroidApp/gen/edu/illinois/mitra/lightpaintapp/Manifest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LightPaintAndroidApp/src/edu/illinois/mitra/lightpaintapp/RobotsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="107" column="45" selection-start-line="107" selection-start-column="45" selection-end-line="107" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/harness/RealisticSimMotionAutomation_quadcopter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4707113">
-          <caret line="32" column="10" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/RealAndroidPlatform.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.06276151">
@@ -890,13 +926,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.06276151">
           <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/models/Model_iRobot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.37974682">
-          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -979,14 +1008,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.015690377">
           <caret line="144" column="26" selection-start-line="144" selection-start-column="25" selection-end-line="144" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-21/android/os/Handler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7217573">
-          <caret line="63" column="13" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -1079,14 +1100,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomaton_iRobot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6464435">
-          <caret line="118" column="35" selection-start-line="118" selection-start-column="35" selection-end-line="118" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/models/Model_quadcopter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7646443">
@@ -1119,34 +1132,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/comms/UdpGpsReceiver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.64748955">
-          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/Gps.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2667364">
-          <caret line="25" column="18" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/BotInfoSelector.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5334728">
           <caret line="45" column="12" selection-start-line="45" selection-start-column="12" selection-end-line="45" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/RealGlobalVarHolder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="58" column="1" selection-start-line="58" selection-start-column="1" selection-end-line="58" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -1183,38 +1172,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/MainHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0118846">
-          <caret line="57" column="16" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/GlobalVarHolder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomation_ARDrone2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1374#1375#0" expanded="true" />
-            <element signature="e#1408#1409#0" expanded="true" />
-            <element signature="e#1452#1453#0" expanded="true" />
-            <element signature="e#1478#1479#0" expanded="true" />
-            <element signature="e#1543#1544#0" expanded="true" />
-            <element signature="e#1569#1570#0" expanded="true" />
-            <element signature="e#2370#2371#0" expanded="true" />
-            <element signature="e#2400#2401#0" expanded="true" />
-            <element signature="method#StageToString#0;class#MotionAutomation_ARDrone2#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1242,10 +1204,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-21/android/os/Handler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.12552302">
+          <caret line="52" column="2" selection-start-line="52" selection-start-column="2" selection-end-line="52" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/StarLib/lib/yadrone_032.jar!/de/yadrone/base/command/CommandManager.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44564047">
+          <caret line="552" column="29" selection-start-line="552" selection-start-column="29" selection-end-line="552" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/models/ModelARDrone2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41945606">
-          <caret line="111" column="29" selection-start-line="111" selection-start-column="29" selection-end-line="111" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="16" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1255,15 +1233,101 @@
     <entry file="file://$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/RobotsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="98" column="46" selection-start-line="98" selection-start-column="46" selection-end-line="98" selection-end-column="46" />
+          <caret line="128" column="29" selection-start-line="128" selection-start-column="29" selection-end-line="128" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-21/java/util/TreeMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34832636">
+          <caret line="239" column="20" selection-start-line="239" selection-start-column="20" selection-end-line="239" selection-end-column="20" />
+          <folding>
+            <element signature="e#7291#7292#0" expanded="true" />
+            <element signature="e#7337#7338#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/objects/PositionList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="3" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/models/Model_iRobot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/StarLApps/FollowApp/src/edu/illinois/mitra/demo/follow/FollowApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09414226">
-          <caret line="60" column="12" selection-start-line="60" selection-start-column="12" selection-end-line="60" selection-end-column="12" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="91" column="32" selection-start-line="91" selection-start-column="32" selection-end-line="91" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomation_ARDrone2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.7531381">
+          <caret line="162" column="11" selection-start-line="162" selection-start-column="11" selection-end-line="162" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#StageToString#0;class#MotionAutomation_ARDrone2#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomatonMiniDrone.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3451883">
+          <caret line="110" column="53" selection-start-line="110" selection-start-column="53" selection-end-line="110" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/motion/MotionAutomaton_iRobot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="185" column="59" selection-start-line="185" selection-start-column="59" selection-end-line="185" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/RealGlobalVarHolder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="44" column="26" selection-start-line="44" selection-start-column="26" selection-end-line="44" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarlAndroidTemplate/src/edu/illinois/mitra/template/MainHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="57" column="14" selection-start-line="57" selection-start-column="14" selection-end-line="57" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/gvh/Gps.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="63" column="35" selection-start-line="63" selection-start-column="35" selection-end-line="63" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StarLib/src/edu/illinois/mitra/starl/comms/UdpGpsReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.5062761">
+          <caret line="115" column="52" selection-start-line="115" selection-start-column="52" selection-end-line="115" selection-end-column="52" />
           <folding />
         </state>
       </provider>
