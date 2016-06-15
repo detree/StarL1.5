@@ -1,5 +1,3 @@
-package edu.illinois.mitra.template;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -35,7 +32,7 @@ import edu.illinois.mitra.starl.objects.Common;
 import edu.illinois.mitra.starl.objects.HandlerMessage;
 
 
-public class RobotsActivity extends Activity implements MessageListener {
+public class RobotsActivity_back extends Activity implements MessageListener {
 	private static final String TAG = "RobotsActivity";
 	private static final String ERR = "Critical Error";
 
@@ -87,7 +84,7 @@ public class RobotsActivity extends Activity implements MessageListener {
         numRobots = 1;
         botInfo = new BotInfoSelector[numRobots];
         // add color, robot type, and device type for each robot here
-        botInfo[0] = new BotInfoSelector("red", Common.ARDRONE2, Common.HTCONEM7);
+        botInfo[0] = new BotInfoSelector("red", Common.MINIDRONE, Common.NEXUS7);
         //botInfo[1] = new BotInfoSelector("green", Common.IROBOT, Common.MOTOE);
         //botInfo[2] = new BotInfoSelector("blue", Common.IROBOT, Common.NEXUS7);
        // botInfo[3] = new BotInfoSelector("white", Common.IROBOT, Common.NEXUS7);
@@ -98,17 +95,17 @@ public class RobotsActivity extends Activity implements MessageListener {
             participants[1][i] = botInfo[i].bluetooth;
             participants[2][i] = botInfo[i].ip;
         }
-		//Notice: the hardware related info is store in model when using the ARDrone2
+
 
 		// Initialize preferences holder
-//		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//		selectedRobot = prefs.getInt(PREF_SELECTED_ROBOT, 0);
-//
-//		if(selectedRobot >= participants[0].length) {
-//			Toast.makeText(this, "Identity error! Reselect robot identity", Toast.LENGTH_LONG).show();
-//		}
-		selectedRobot = 0;
-
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		selectedRobot = prefs.getInt(PREF_SELECTED_ROBOT, 0);
+		
+		if(selectedRobot >= participants[0].length) {
+			Toast.makeText(this, "Identity error! Reselect robot identity", Toast.LENGTH_LONG).show();
+			selectedRobot = 0;
+		}
+		
 		// Set up the GUI
 		setupGUI();
 
@@ -133,7 +130,6 @@ public class RobotsActivity extends Activity implements MessageListener {
 		connect();
 
 		createAppInstance(gvh);
-		Log.d("Print","onCreate finished");
 	}
 
 	public void createAppInstance(GlobalVarHolder gvh) {
@@ -222,7 +218,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 		txtRobotName.setText(participants[0][selectedRobot]);
 		txtRobotName.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				AlertDialog.Builder sel_robot_builder = new AlertDialog.Builder(RobotsActivity.this);
+				AlertDialog.Builder sel_robot_builder = new AlertDialog.Builder(RobotsActivity_back.this);
 				sel_robot_builder.setTitle("Who Am I?");
 				sel_robot_builder.setItems(participants[0], new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {

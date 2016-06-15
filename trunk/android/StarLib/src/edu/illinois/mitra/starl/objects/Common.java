@@ -24,10 +24,12 @@ public final class Common {
     // Bot types
     public static final int IROBOT = 50;
     public static final int MINIDRONE = 51;
+	public static final int ARDRONE2 = 52;
 
     // Mobile device types
     public static final int NEXUS7 = 60;
     public static final int MOTOE = 61;
+	public static final int HTCONEM7 = 62;
 
 
 	// Message IDs

@@ -50,8 +50,8 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
     //TODO: public double maxAltitude, minAltitude;
     public boolean outdoor;
 
-    public ModelARDrone2(String received) throws ItemFormattingException {
-        String[] parts = received.replace(",", "").split("\\|");
+    public ModelARDrone2(String wholedesc) throws ItemFormattingException {
+        String[] parts = wholedesc.replace(",", "").split("\\|");
         if(parts.length==10){
             this.name = parts[1];
             this.ipAddr = parts[2];
@@ -85,8 +85,6 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
 
     private void initHelper(){
         droneInstance = new ARDrone(ipAddr, null);
-        cmd = droneInstance.getCommandManager();
-        nav = droneInstance.getNavDataManager();
         vX=0;
         vY=0;
         vZ=0;
@@ -102,6 +100,8 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
         try{
             droneInstance.reset();
             droneInstance.start();
+            cmd = droneInstance.getCommandManager();
+            nav = droneInstance.getNavDataManager();
             nav.addAttitudeListener(new ARDrone2_AttitudeListn(this.name));
             droneInstance.setSpeed(maxSpeed);
             cmd.setOutdoor(outdoor, outdoor);
