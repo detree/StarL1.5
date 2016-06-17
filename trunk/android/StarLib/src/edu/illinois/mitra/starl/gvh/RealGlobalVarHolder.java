@@ -34,7 +34,8 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 	 * @param handler the main application handler capable of receiving GUI update messages
 	 * @param robotMac the MAC address of this agent's iRobot Create chassis
 	 */
-	public RealGlobalVarHolder(String name, Map<String,String> participants, TrackedRobot initpos, Handler handler, String robotMac, Context context) {
+	public RealGlobalVarHolder(String name, Map<String,String> participants, TrackedRobot initpos,
+							   Handler handler, String robotMac, Context context) {
 //	public RealGlobalVarHolder(String name, Map<String,String> participants, Handler handler, String robotMac, Context context) {
 		super(name, participants);
 
@@ -42,7 +43,8 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 		super.trace = new Trace(name, "/sdcard/trace/", this);
 		super.plat = new RealAndroidPlatform(handler);
 		super.comms = new Comms(this, new SmartUdpComThread(this));
-		super.gps = new Gps(this, new UdpGpsReceiver(this,"192.168.1.100",4000,new PositionList(),new PositionList(), new ObstacleList(), new Vector<ObstacleList>(3,2) ));
+		super.gps = new Gps(this, new UdpGpsReceiver(this,"192.168.1.100",4000,new PositionList(),
+							new PositionList(), new ObstacleList(), new Vector<ObstacleList>(3,2))  );
 		plat.model = initpos;
 		plat.reachAvoid = new ReachAvoid(this);
         if(initpos instanceof Model_iRobot) {
