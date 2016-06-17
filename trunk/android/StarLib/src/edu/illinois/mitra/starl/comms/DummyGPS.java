@@ -9,7 +9,10 @@ import edu.illinois.mitra.starl.objects.ObstacleList;
 import edu.illinois.mitra.starl.objects.PositionList;
 
 /**
- * Created by SC on 6/17/16.
+ * Created by SC.
+ * @Description: This class is to test some of the motion functions in the motoautomation. Therefore, all of the
+ * positions in this class are static and preset manually.
+ * Everything keep simple here
  */
 public class DummyGPS extends Thread implements GpsReceiver {
     private static final String TAG = "DUMMY GPS";
@@ -18,12 +21,13 @@ public class DummyGPS extends Thread implements GpsReceiver {
     private GlobalVarHolder gvh;
     private String name = null;
     public PositionList robotPos;
-    public PositionList<ItemPosition> waypoint;
+    public PositionList<ItemPosition> waypoints;
     public ObstacleList obs;
     public Vector<ObstacleList> view;
 
     private boolean running = false;
 
+    private final int[] mypos = {0,0,0};//the pos of the robot
     private final int[][] goalpos = {{1,0,0},{-1,0,0},{0,1,0},{0,-1,0}};
 
     public DummyGPS(GlobalVarHolder gvh){
@@ -32,7 +36,7 @@ public class DummyGPS extends Thread implements GpsReceiver {
         this.name = gvh.id.getName();
 
         this.robotPos = new PositionList();
-        this.waypoint = new PositionList<ItemPosition>();
+        this.waypoints = new PositionList<ItemPosition>();
         this.obs = new ObstacleList();
         view = null;//fixme: to see if there are errors
 
@@ -48,14 +52,14 @@ public class DummyGPS extends Thread implements GpsReceiver {
 
     @Override
     public PositionList<ItemPosition> getWaypoints(){
-        return null;
+        return waypoints;
     }
 
     private void WaypointHelper(){
         for(int i=0; i<goalpos.length; i++){
             ItemPosition temp = new ItemPosition("Goal"+Integer.toString(i),
                     goalpos[i][0], goalpos[i][1], goalpos[i][2]);
-            waypoint.update(temp);
+            waypoints.update(temp);
         }
     }
 
@@ -66,12 +70,12 @@ public class DummyGPS extends Thread implements GpsReceiver {
 
     @Override
     public ObstacleList getObspoints(){
-        return null;
+        return obs;
     }
 
     @Override
     public Vector<ObstacleList> getViews(){
-        return null;
+        return view;
     }
 
     @Override
