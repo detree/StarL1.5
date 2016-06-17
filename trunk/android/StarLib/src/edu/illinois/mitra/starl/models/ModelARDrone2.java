@@ -67,6 +67,58 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
         initHelper();
     }
 
+    public ModelARDrone2(String wholedesc, ModelARDrone2 old) throws ItemFormattingException {
+        String[] parts = wholedesc.replace(",", "").split("\\|");
+        if(parts.length==10){
+            this.name = parts[1];
+            this.ipAddr = parts[2];
+            this.x = Integer.parseInt(parts[2]);
+            this.y = Integer.parseInt(parts[3]);
+            this.z = Integer.parseInt(parts[4]);
+            this.currYaw = Integer.parseInt(parts[5]);
+            this.currPitch = Integer.parseInt(parts[6]);
+            this.currRoll = Integer.parseInt(parts[7]);
+        } else {
+            throw new ItemFormattingException("Should be length 10, is length " + parts.length);
+        }
+        CopySetupDrone(old);
+    }
+
+    private void CopyFull(ModelARDrone2 old){
+        this.ipAddr = old.ipAddr;
+        this.droneInstance = old.droneInstance;
+        this.cmd = old.cmd;
+        this.nav = old.nav;
+        this.currPitch = old.currPitch;
+        this.currRoll = old.currRoll;
+        this.currYaw = old.currYaw;
+        this.vYaw = old.vYaw;
+        this.vPitch = old.vPitch;
+        this.vRoll = old.vRoll;
+        this.vX = old.vX;
+        this.vY = old.vY;
+        this.vZ = old.vZ;
+        this.maxSpeed = old.maxSpeed;
+        this.outdoor = old.outdoor;
+        this.x = old.x;
+        this.y = old.y;
+        this.z = old.z;
+    }
+
+    private void CopySetupDrone(ModelARDrone2 old) throws ItemFormattingException{
+        if(old.ipAddr == null || old.droneInstance == null || old.cmd == null)
+            throw new ItemFormattingException("The OLD drone does not seems to be properly set up");
+        this.ipAddr = old.ipAddr;
+        this.droneInstance = old.droneInstance;
+        this.cmd = old.cmd;
+        this.nav = old.nav;
+        this.vX = old.vX;
+        this.vY = old.vY;
+        this.vZ = old.vZ;
+        this.maxSpeed = old.maxSpeed;
+        this.outdoor = old.outdoor;
+    }
+
     public ModelARDrone2(String name, int x, int y){
         super(name, x, y, 0);
         this.currYaw = 0;
