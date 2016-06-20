@@ -1,5 +1,7 @@
 package edu.illinois.mitra.starl.objects;
 
+import android.util.Log;
+
 import java.util.HashMap;
 
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
@@ -18,18 +20,18 @@ public class ItemPosition extends Point3d implements Comparable<ItemPosition>{
 	public int index;
 	public long receivedTime;
 	
-	/**
-	 * Construct an ItemPosition from a name, X, and Y positions, With Z= 0 as default
-	 * 
-	 * @param name The name of the new position
-	 * @param x X position
-	 * @param y Y position
-	 */
 	public ItemPosition(){
 		super();
 		setname("");
 	}
-	
+
+	/**
+	 * Construct an ItemPosition from a name, X, and Y positions, With Z= 0 as default
+	 *
+	 * @param name The name of the new position
+	 * @param x X position
+	 * @param y Y position
+	 */
 	public ItemPosition(String name, int x, int y) {
 		super(x, y);
 		setname(name);
@@ -37,6 +39,7 @@ public class ItemPosition extends Point3d implements Comparable<ItemPosition>{
 	
 	public ItemPosition(String name, int x, int y, int z) {
 		super(x, y, z);
+
 		setname(name);
 	}
 	

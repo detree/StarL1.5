@@ -189,7 +189,7 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
             e.printStackTrace();
         }
         gvh.log.i(TAG, "Closed UDP GPS socket");
-		gvh.trace.traceEvent(TAG, "Cancelled", gvh.time());
+		gvh.trace.traceEvent(TAG, "cancelled", gvh.time());
     }
 
 	@Override

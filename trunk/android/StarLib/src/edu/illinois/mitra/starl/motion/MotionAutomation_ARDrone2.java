@@ -28,7 +28,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     }
     private STAGE prev=null, next = null;
     protected STAGE stage = STAGE.INIT;
-    protected boolean running = false;
+    volatile protected boolean running = false;
     boolean colliding = false;
 
     //TODO need to pass some more parameters into this param
@@ -53,10 +53,13 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     public void goTo(ItemPosition dest) {
         Log.i("Automation ARDrone2", "GoTo called!!!");
-        if((inMotion && !this.dest.equals(dest)) || !inMotion) {
+        if( this.dest == null || (inMotion && !this.dest.equals(dest))) {
             done = false;
             this.dest = new ItemPosition(dest.name,dest.x,dest.y,dest.z);
+            Log.i("Automation ARDrone2", "GoTo passed!!!");
+//            this.dest = new ItemPosition("temp", 1, 0, 0);
             motionStart();
+            Log.i("Automation ARDrone2", "GoTo Executed!!!");
         }
     }
 
@@ -93,11 +96,16 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         super.run();
         gvh.threadCreated(this);
         while(true){
-            if(!running) continue;
+            if(!running){
+                //Log.i("Automation ARDrone2", "Thread running, but skipping");
+                continue;
+            }
             Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
             int distance = 0;
-            if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF)
-                distance = (int) Math.sqrt(Math.pow((mypos.x - dest.x),2) + Math.pow((mypos.y - dest.y), 2));
+            if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF) {
+                distance = (int) Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
+                Log.i("curr dest ", "("+dest.x+","+dest.y+","+dest.z+")");
+            }
             if(colliding) continue;
             switch (stage){
                 case INIT:
@@ -163,7 +171,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         mypos = (ModelARDrone2) gvh.plat.getModel();
         mypos.initialize();
         cmd = ((ModelARDrone2)gvh.plat.getModel()).cmd;
-        running = true;
+        //running = true;
+        inMotion = true;
         super.start();
         gvh.log.d(TAG, "STARTED!");
     }

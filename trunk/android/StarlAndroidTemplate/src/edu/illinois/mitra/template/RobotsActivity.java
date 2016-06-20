@@ -25,7 +25,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import edu.illinois.mitra.demo.follow.FollowApp;
-import edu.illinois.mitra.starl.comms.MessageContents;
 import edu.illinois.mitra.starl.comms.RobotMessage;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.gvh.RealGlobalVarHolder;
@@ -134,6 +133,7 @@ public class RobotsActivity extends Activity implements MessageListener {
 
 		createAppInstance(gvh);
 		Log.d("Print","onCreate finished");
+		launch(4,1);
 	}
 
 	public void createAppInstance(GlobalVarHolder gvh) {
@@ -151,8 +151,8 @@ public class RobotsActivity extends Activity implements MessageListener {
 
 				gvh.trace.traceSync("APPLICATION LAUNCH", gvh.time());
 
-				RobotMessage informLaunch = new RobotMessage("ALL", gvh.id.getName(), Common.MSG_ACTIVITYLAUNCH, new MessageContents(Common.intsToStrings(numWaypoints, runNum)));
-				gvh.comms.addOutgoingMessage(informLaunch);
+				//RobotMessage informLaunch = new RobotMessage("ALL", gvh.id.getName(), Common.MSG_ACTIVITYLAUNCH, new MessageContents(Common.intsToStrings(numWaypoints, runNum)));
+				//gvh.comms.addOutgoingMessage(informLaunch);
 				results = executor.submit(runThread);
 			} else {
 				gvh.plat.sendMainToast("Should have " + numWaypoints + " waypoints, but I have " + gvh.gps.getWaypointPositions().getNumPositions());

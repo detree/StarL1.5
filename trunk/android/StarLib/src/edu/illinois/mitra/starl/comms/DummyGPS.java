@@ -47,7 +47,7 @@ public class DummyGPS extends Thread implements GpsReceiver {
 
     @Override
     public PositionList<ItemPosition> get_robots(){
-        return null;
+        return robotPos;
     }
 
     @Override
@@ -83,11 +83,12 @@ public class DummyGPS extends Thread implements GpsReceiver {
         gvh.log.i("DUMMY GPS", "Starting GPS receiver");
         running = true;
         super.start();
+        robotPos.update((ItemPosition) gvh.plat.model);
     }
 
     @Override
     public void cancel() {
         running = false;
-
+        gvh.trace.traceEvent(TAG, "cancelled", gvh.time());
     }
 }
