@@ -45,7 +45,6 @@ public class FollowApp extends LogicThread {
     public FollowApp(GlobalVarHolder gvh) {
         super(gvh);
         MotionParameters.Builder settings = new MotionParameters.Builder();
-//		settings.ROBOT_RADIUS(400);
         settings.COLAVOID_MODE(COLAVOID_MODE_TYPE.USE_COLAVOID);
         MotionParameters param = settings.build();
         gvh.plat.moat.setParameters(param);
@@ -61,6 +60,7 @@ public class FollowApp extends LogicThread {
     @Override
     public List<Object> callStarL() {
         while(true) {
+            System.out.println("in FollowApp, stage:"+stage);
             switch(stage) {
                 case INIT:
                     for(ItemPosition i : gvh.gps.getWaypointPositions())
@@ -133,9 +133,26 @@ public class FollowApp extends LogicThread {
     @SuppressWarnings("unchecked")
     private <X, T> T getDestination(Map<X, T> map, int index) {
         // Keys must be 0-A format for this to work
-        String key = Integer.toString(index) + "-A";
+        String key = "Goal"+Integer.toString(index);
         // this is for key that is just an int, no -A
         //String key = Integer.toString(index);
         return map.get(key);
+    }
+
+    private String StageToString(Stage curr)
+    {
+        switch (curr){
+            case INIT:
+                return "INIT";
+            case PICK:
+                return "PICK";
+            case GO:
+                return "GO";
+            case DONE:
+                return "DOEN";
+            case WAIT:
+                return "WAIT";
+        }
+        return "UNKNOWN";
     }
 }

@@ -2,14 +2,14 @@ package edu.illinois.mitra.starl.harness;
 
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.models.Model_quadcopter;
-import edu.illinois.mitra.starl.motion.MotionAutomation_ARDrone2;
+import edu.illinois.mitra.starl.motion.MotionAutomation_quadcopter;
 
-public class RealisticSimMotionAutomation_ARDrone2 extends MotionAutomation_ARDrone2 {
+public class RealisticSimMotionAutomation_quadcopter extends MotionAutomation_quadcopter {
 	private SimGpsProvider gpsp;
 	private String name;
 	private Model_quadcopter my_model;
 	
-	public RealisticSimMotionAutomation_ARDrone2(GlobalVarHolder gvh, SimGpsProvider gpsp) {
+	public RealisticSimMotionAutomation_quadcopter(GlobalVarHolder gvh, SimGpsProvider gpsp) {
 		super(gvh, null);
 		name = gvh.id.getName();
 		this.gpsp = gpsp;

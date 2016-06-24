@@ -44,7 +44,9 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 	private String name = null;
 	private boolean received = false;
 
-	public UdpGpsReceiver(GlobalVarHolder gvh,String hostname, int port, PositionList robotPositions, PositionList<ItemPosition> waypointPositions, ObstacleList obs, Vector<ObstacleList> viewsOfWorld) {
+	public UdpGpsReceiver(GlobalVarHolder gvh,String hostname, int port, PositionList robotPositions,
+						  PositionList<ItemPosition> waypointPositions, ObstacleList obs,
+						  Vector<ObstacleList> viewsOfWorld) {
 		super();
 		this.gvh = gvh;
 		
@@ -187,7 +189,7 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
             e.printStackTrace();
         }
         gvh.log.i(TAG, "Closed UDP GPS socket");
-		gvh.trace.traceEvent(TAG, "Cancelled", gvh.time());
+		gvh.trace.traceEvent(TAG, "cancelled", gvh.time());
     }
 
 	@Override

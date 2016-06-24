@@ -181,6 +181,7 @@ public class MotionAutomaton_iRobot extends RobotMotion {
 		while(true) {
 //			gvh.gps.getObspointPositions().updateObs();
 			if(running) {
+				//Notice: interesting here....
                 // why is getModel being used? Think it should be get position.
 				//mypos = (Model_iRobot)gvh.plat.getModel();
                 mypos = (Model_iRobot)gvh.gps.getMyPosition();

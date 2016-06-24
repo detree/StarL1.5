@@ -1,6 +1,7 @@
 package edu.illinois.mitra.template;
 
 import edu.illinois.mitra.starl.interfaces.TrackedRobot;
+import edu.illinois.mitra.starl.models.ModelARDrone2;
 import edu.illinois.mitra.starl.models.Model_iRobot;
 import edu.illinois.mitra.starl.models.Model_quadcopter;
 import edu.illinois.mitra.starl.objects.Common;
@@ -29,6 +30,9 @@ public class BotInfoSelector {
             else if(deviceType == Common.MOTOE) {
                 ip = "192.168.1.114"; // reserved IP address of red MotoE phone
             }
+            else if(deviceType == Common.HTCONEM7){
+                ip = "192.168.1.2"; // FixMe: need to figure out
+            }
             if(type == Common.IROBOT) {
                 bluetooth = "5C:F3:70:75:BB:0E"; // bluetooth address of red raspberry pi on red irobot
                 this.type = new Model_iRobot(name, 0,0);
@@ -36,6 +40,9 @@ public class BotInfoSelector {
             else if(type == Common.MINIDRONE) {
                 bluetooth = "Mars_122139"; // bluetooth address of red minidrone (use free flight 3 app from play store to get this address)
                 this.type = new Model_quadcopter(name, 0,0);
+            }
+            else if(type == Common.ARDRONE2) {
+                this.type = new ModelARDrone2(name, 0,0,0);
             }
 
         }

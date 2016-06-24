@@ -4,22 +4,19 @@ import android.content.Context;
 import android.os.Handler;
 
 import java.util.Map;
-import java.util.Vector;
 
+import edu.illinois.mitra.starl.comms.DummyGPS;
 import edu.illinois.mitra.starl.comms.SmartUdpComThread;
-import edu.illinois.mitra.starl.comms.UdpGpsReceiver;
 import edu.illinois.mitra.starl.interfaces.TrackedRobot;
-import edu.illinois.mitra.starl.models.Model_ARDrone2;
+import edu.illinois.mitra.starl.models.ModelARDrone2;
 import edu.illinois.mitra.starl.models.Model_iRobot;
 import edu.illinois.mitra.starl.models.Model_quadcopter;
 import edu.illinois.mitra.starl.motion.BluetoothInterface;
 import edu.illinois.mitra.starl.motion.MiniDroneBTI;
+import edu.illinois.mitra.starl.motion.MotionAutomation_ARDrone2;
 import edu.illinois.mitra.starl.motion.MotionAutomatonMiniDrone;
 import edu.illinois.mitra.starl.motion.MotionAutomaton_iRobot;
-import edu.illinois.mitra.starl.motion.MotionAutomation_ARDrone2;
 import edu.illinois.mitra.starl.motion.ReachAvoid;
-import edu.illinois.mitra.starl.objects.ObstacleList;
-import edu.illinois.mitra.starl.objects.PositionList;
 
 /**
  * Extension of the GlobalVarHolder class for use in physical implementations of StarL applications
@@ -34,7 +31,8 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 	 * @param handler the main application handler capable of receiving GUI update messages
 	 * @param robotMac the MAC address of this agent's iRobot Create chassis
 	 */
-	public RealGlobalVarHolder(String name, Map<String,String> participants, TrackedRobot initpos, Handler handler, String robotMac, Context context) {
+	public RealGlobalVarHolder(String name, Map<String,String> participants, TrackedRobot initpos,
+							   Handler handler, String robotMac, Context context) {
 //	public RealGlobalVarHolder(String name, Map<String,String> participants, Handler handler, String robotMac, Context context) {
 		super(name, participants);
 
@@ -42,7 +40,9 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
 		super.trace = new Trace(name, "/sdcard/trace/", this);
 		super.plat = new RealAndroidPlatform(handler);
 		super.comms = new Comms(this, new SmartUdpComThread(this));
-		super.gps = new Gps(this, new UdpGpsReceiver(this,"192.168.1.100",4000,new PositionList(),new PositionList(), new ObstacleList(), new Vector<ObstacleList>(3,2) ));
+//		super.gps = new Gps(this, new UdpGpsReceiver(this,"192.168.1.100",4000,new PositionList(),
+//							new PositionList(), new ObstacleList(), new Vector<ObstacleList>(3,2))  );
+		super.gps = new Gps(this, new DummyGPS(this) );
 		plat.model = initpos;
 		plat.reachAvoid = new ReachAvoid(this);
         if(initpos instanceof Model_iRobot) {
@@ -53,18 +53,10 @@ public class RealGlobalVarHolder extends GlobalVarHolder {
             plat.moat = new MotionAutomatonMiniDrone(this, new MiniDroneBTI(this, context, robotMac));
         }
 
-		else if (initpos instanceof Model_ARDrone2){
-			plat.moat = new MotionAutomation_ARDrone2()
+		else if (initpos instanceof ModelARDrone2){
+			plat.moat = new MotionAutomation_ARDrone2(this);
 		}
-/*
-//TD_NATHAN: resolve - resolved above
-        if(type == Common.IROBOT) {
-            plat.moat = new MotionAutomaton(this, new BluetoothInterface(this, robotMac.trim()));
-        }
-        else if(type == Common.MINIDRONE) {
-            plat.moat = new MotionAutomatonMiniDrone(this, new MiniDroneBTI(this, context, robotMac));
-        }
-*/
+
 		plat.moat.start();
 	}
 
