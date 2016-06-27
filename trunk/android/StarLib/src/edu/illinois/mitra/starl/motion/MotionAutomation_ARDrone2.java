@@ -30,6 +30,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     protected STAGE stage = STAGE.INIT;
     volatile protected boolean running = false;
     boolean colliding = false;
+    private static int timecount;//notice: only for the test of dummyGPS
 
     //TODO need to pass some more parameters into this param
     private volatile MotionParameters param = MotionParameters.defaultParameters();
@@ -53,7 +54,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     public void goTo(ItemPosition dest) {
         Log.i("Automation ARDrone2", "GoTo called!!!");
-        if( this.dest == null || (inMotion && !this.dest.equals(dest))) {
+        try {
+            sleep(1000, 0);
+        } catch (Exception exc){
+            exc.printStackTrace();
+        }
+        if( this.dest == null || (!inMotion && !this.dest.equals(dest))) {
             done = false;
             this.dest = new ItemPosition(dest.name,dest.x,dest.y,dest.z);
             Log.i("Automation ARDrone2", "GoTo passed!!!");
@@ -91,6 +97,15 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         //TODO maybe? some command to disconnect the hardware.
     }
 
+    private double getDistance(){
+        if(timecount>=100000) {
+            timecount=0;
+            return 0.0;
+        }
+        else
+            return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
+    }
+
     @Override
     public void run(){
         super.run();
@@ -100,16 +115,17 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                 //Log.i("Automation ARDrone2", "Thread running, but skipping");
                 continue;
             }
+            if(inMotion) timecount++;
             Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
-            int distance = 0;
+            double distance = 0;
             if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF) {
-                distance = (int) Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
-                Log.i("curr dest ", "("+dest.x+","+dest.y+","+dest.z+")");
+                distance = getDistance();
+                Log.i("curr dest ", "("+dest.x+","+dest.y+","+dest.z+")" + " timecount=" + Integer.toString(timecount)+ " dist=" + Double.toString(distance));
             }
             if(colliding) continue;
             switch (stage){
                 case INIT:
-                    if(distance <= param.GOAL_RADIUS){
+                    if(distance <= 0.5 ){//param.GOAL_RADIUS){
                         next = STAGE.GOAL;
                     }
                     cmd.takeOff();
@@ -127,7 +143,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     inMotion = true;
                     if(mypos.z < safeHeight)
                         cmd.move(0, 0, Math.abs(safeHeight-mypos.z), 0);
-                    if(distance <= param.GOAL_RADIUS) {
+                    if(distance <= 0.5 ){//param.GOAL_RADIUS){ notice: only for curretn demos
                         next = STAGE.GOAL;
                     }
                     else {
@@ -148,6 +164,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                         next = STAGE.HOVER;
                     else
                         next = STAGE.LAND;
+                    inMotion = false;
                     break;
                 case LAND:
                     cmd.landing();

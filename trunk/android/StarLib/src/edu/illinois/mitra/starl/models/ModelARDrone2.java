@@ -146,7 +146,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
         vPitch=0;
         vRoll=0;
         outdoor = false;
-        maxSpeed = 10;
+        maxSpeed = 5;
     }
 
     @Override
