@@ -116,11 +116,11 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                 continue;
             }
             if(inMotion) timecount++;
-            Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
+            //Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
             double distance = 0;
             if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF) {
                 distance = getDistance();
-                Log.i("curr dest ", "("+dest.x+","+dest.y+","+dest.z+")" + " timecount=" + Integer.toString(timecount)+ " dist=" + Double.toString(distance));
+                //Log.i("curr dest ", "("+dest.x+","+dest.y+","+dest.z+")" + " timecount=" + Integer.toString(timecount)+ " dist=" + Double.toString(distance));
             }
             if(colliding) continue;
             switch (stage){
@@ -142,12 +142,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                 case MOVE:
                     inMotion = true;
                     if(mypos.z < safeHeight)
-                        cmd.move(0, 0, Math.abs(safeHeight-mypos.z), 0);
+                        cmd.move(0, 0, Math.abs(safeHeight-mypos.z), 0).doFor(1);
                     if(distance <= 0.5 ){//param.GOAL_RADIUS){ notice: only for curretn demos
                         next = STAGE.GOAL;
                     }
                     else {
-                        cmd.move(dest.x - mypos.x, dest.y - mypos.y, 0, 0);
+                        cmd.move(dest.x - mypos.x, dest.y - mypos.y, 0, 0).doFor(1);
                         next = STAGE.MOVE;
                     }
                     break;
