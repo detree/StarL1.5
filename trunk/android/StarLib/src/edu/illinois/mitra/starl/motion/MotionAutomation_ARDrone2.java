@@ -103,11 +103,15 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 //            return 0.0;
 //        }
 //        else
-        if(mypos==null)
+        if(mypos==null) {
             Log.e(TAG, "mypos is null");
-        if(dest==null)
+            return Math.sqrt(Math.pow((0 - dest.x), 2) + Math.pow((0 - dest.y), 2));
+        }
+        if(dest==null) {
             Log.e(TAG, "dest is null");
-            return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
+            return Math.sqrt(Math.pow((mypos.x - 0), 2) + Math.pow((mypos.y - 0), 2));
+        }
+        return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
     }
 
     @Override
