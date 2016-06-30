@@ -13,6 +13,7 @@ import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.interfaces.GpsReceiver;
 import edu.illinois.mitra.starl.interfaces.RobotEventListener.Event;
+import edu.illinois.mitra.starl.models.ModelARDrone2;
 import edu.illinois.mitra.starl.models.Model_iRobot;
 import edu.illinois.mitra.starl.models.Model_quadcopter;
 import edu.illinois.mitra.starl.objects.Common;
@@ -136,6 +137,21 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 		    					gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
 		    				}
 		    				break;
+						case '%':
+							try {
+								String[] subparts = parts[i].replace(",", "").split("\\|");
+								ModelARDrone2 oldpos = (ModelARDrone2) robotPositions.getPosition(subparts[1]);
+								ModelARDrone2 newpos = new ModelARDrone2(parts[i], oldpos);
+								robotPositions.update(newpos, gvh.time());
+								gvh.sendRobotEvent(Event.GPS);
+								if(newpos.name.equals(name)) {
+									gvh.trace.traceEvent(TAG, "Received Position", newpos, gvh.time());
+									gvh.sendRobotEvent(Event.GPS_SELF);
+								}
+							} catch(ItemFormattingException e){
+								gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
+							}
+							break;
 		    			case 'G':
 		    				gvh.trace.traceEvent(TAG, "Received launch command", gvh.time());
 		    				int[] args = Common.partsToInts(parts[i].substring(3).split(" "));

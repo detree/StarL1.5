@@ -60,7 +60,7 @@ public class FollowApp extends LogicThread {
     @Override
     public List<Object> callStarL() {
         while(true) {
-            System.out.println("in FollowApp, stage:"+stage);
+            //System.out.println("in FollowApp, stage:"+stage);
             switch(stage) {
                 case INIT:
                     for(ItemPosition i : gvh.gps.getWaypointPositions())

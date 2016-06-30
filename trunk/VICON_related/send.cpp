@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <errno.h>
+#include <unistd.h>
 #include <cstring>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -7,11 +8,177 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <iostream>
+
+//=========================VICON specific=========================
+#include "Client.h"
+
+#include <iostream>
+#include <fstream>
+#include <cassert>
+#include <ctime>
+
+#ifdef WIN32
+#include <conio.h>   // For _kbhit()
+#include <cstdio>   // For getchar()
+#include <windows.h> // For Sleep()
+#endif // WIN32
+
+#include <time.h>
+#include <unistd.h>
+
+using namespace ViconDataStreamSDK::CPP;
+
+#define output_stream if(!LogFile.empty()) ; else std::cout 
+
+namespace
+{
+    std::string Adapt( const bool i_Value )
+    {
+        return i_Value ? "True" : "False";
+    }
+
+    std::string Adapt( const Direction::Enum i_Direction )
+    {
+        switch( i_Direction )
+        {
+            case Direction::Forward:
+                return "Forward";
+            case Direction::Backward:
+                return "Backward";
+            case Direction::Left:
+                return "Left";
+            case Direction::Right:
+                return "Right";
+            case Direction::Up:
+                return "Up";
+            case Direction::Down:
+                return "Down";
+            default:
+                return "Unknown";
+        }
+    }
+
+    std::string Adapt( const DeviceType::Enum i_DeviceType )
+    {
+        switch( i_DeviceType )
+        {
+            case DeviceType::ForcePlate:
+                return "ForcePlate";
+            case DeviceType::Unknown:
+            default:
+                return "Unknown";
+        }
+    }
+
+    std::string Adapt( const Unit::Enum i_Unit )
+    {
+        switch( i_Unit )
+        {
+            case Unit::Meter:
+                return "Meter";
+            case Unit::Volt:
+                return "Volt";
+            case Unit::NewtonMeter:
+                return "NewtonMeter";
+            case Unit::Newton:
+                return "Newton";
+            case Unit::Kilogram:
+                return "Kilogram";
+            case Unit::Second:
+                return "Second";
+            case Unit::Ampere:
+                return "Ampere";
+            case Unit::Kelvin:
+                return "Kelvin";
+            case Unit::Mole:
+                return "Mole";
+            case Unit::Candela:
+                return "Candela";
+            case Unit::Radian:
+                return "Radian";
+            case Unit::Steradian:
+                return "Steradian";
+            case Unit::MeterSquared:
+                return "MeterSquared";
+            case Unit::MeterCubed:
+                return "MeterCubed";
+            case Unit::MeterPerSecond:
+                return "MeterPerSecond";
+            case Unit::MeterPerSecondSquared:
+                return "MeterPerSecondSquared";
+            case Unit::RadianPerSecond:
+                return "RadianPerSecond";
+            case Unit::RadianPerSecondSquared:
+                return "RadianPerSecondSquared";
+            case Unit::Hertz:
+                return "Hertz";
+            case Unit::Joule:
+                return "Joule";
+            case Unit::Watt:
+                return "Watt";
+            case Unit::Pascal:
+                return "Pascal";
+            case Unit::Lumen:
+                return "Lumen";
+            case Unit::Lux:
+                return "Lux";
+            case Unit::Coulomb:
+                return "Coulomb";
+            case Unit::Ohm:
+                return "Ohm";
+            case Unit::Farad:
+                return "Farad";
+            case Unit::Weber:
+                return "Weber";
+            case Unit::Tesla:
+                return "Tesla";
+            case Unit::Henry:
+                return "Henry";
+            case Unit::Siemens:
+                return "Siemens";
+            case Unit::Becquerel:
+                return "Becquerel";
+            case Unit::Gray:
+                return "Gray";
+            case Unit::Sievert:
+                return "Sievert";
+            case Unit::Katal:
+                return "Katal";
+
+            case Unit::Unknown:
+            default:
+                return "Unknown";
+        }
+    }
+#ifdef WIN32
+    bool Hit()
+    {
+        bool hit = false;
+        while( _kbhit() )
+        {
+            getchar();
+            hit = true;
+        }
+        return hit;
+    }
+#endif
+}
+
+
+//=======================Global Info and Flags=======================
 const char* HOSTADDR= "10.194.57.127";
 const char* SERVERPORT = "4000";
-// the port users will be connecting to
+//std::string VICONHost = "192.17.178.232:801";//port always is 801
+std::string VICONHost = "192.168.1.106:801";//port always is 801
+std::string LogFile = "";
+std::string MulticastAddress = "244.0.0.0:44801";
+bool ConnectToMultiCast = false;
+bool EnableMultiCast = false;
+
+
 int main(int argc, char *argv[])
 {
+    //initialize the socket
     int sockfd;
     struct addrinfo hints, *servinfo, *p;
     int rv;
@@ -21,31 +188,82 @@ int main(int argc, char *argv[])
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_DGRAM;
     if ((rv = getaddrinfo(HOSTADDR, SERVERPORT, &hints, &servinfo)) != 0) {
-        cout<<"ERROR:"<<
-        fprintf(stderr, "getaddrinfo: %s\n", strerror(rv));
+        std::cout<<"ERROR:"<<"getaddrinfo: "<<strerror(rv)<<std::endl;
         return 1;
     }
     // loop through all the results and make a socket
     for(p = servinfo; p != NULL; p = p->ai_next) {
         if ((sockfd = socket(p->ai_family, p->ai_socktype,
-                p->ai_protocol)) == -1) {
+                        p->ai_protocol)) == -1) {
             perror("talker: socket");
             continue; 
         }
         break;
     }
     if (p == NULL) {
-        fprintf(stderr, "talker: failed to create socket\n");
+        std::cout<<"talker: failed to create socket"<<std::endl;
         return 2;
     }
-    if ((numbytes = sendto(sockfd, msg, strlen(msg), 0,
-             p->ai_addr, p->ai_addrlen)) == -1) {
-        perror("talker: sendto");
-        exit(1);
+
+    Client MyClient;
+    while(true)
+    {
+        //initialize VICON======================================================
+        std::cout << "Connecting to " << VICONHost << " ..." << std::flush;
+        while( !MyClient.IsConnected().Connected )
+        {
+            bool ok = false;
+            if(ConnectToMultiCast)
+            {
+                // Multicast connection
+                ok = ( MyClient.ConnectToMulticast( VICONHost , MulticastAddress ).Result 
+                        == Result::Success );
+            }
+            else
+            {
+                ok =( MyClient.Connect( VICONHost ).Result == Result::Success );
+            }
+            if(!ok)
+                std::cout << "Warning - connect failed..." << std::endl;
+            std::cout << ".";
+            usleep(200);
+            std::cout << std::endl;
+        }
+        // Enable some different data types
+        MyClient.EnableSegmentData();
+        MyClient.EnableMarkerData();
+        MyClient.EnableUnlabeledMarkerData();
+        MyClient.EnableDeviceData();
+        std::cout << "Segment Data Enabled: "
+            << Adapt( MyClient.IsSegmentDataEnabled().Enabled )<< std::endl;
+        std::cout << "Marker Data Enabled: "
+            << Adapt( MyClient.IsMarkerDataEnabled().Enabled )<< std::endl;
+        std::cout << "Unlabeled Marker Data Enabled: "
+            << Adapt( MyClient.IsUnlabeledMarkerDataEnabled().Enabled )<< std::endl;
+        std::cout << "Device Data Enabled: "
+            << Adapt( MyClient.IsDeviceDataEnabled().Enabled )<< std::endl;
+        // Set the streaming mode
+        MyClient.SetStreamMode( ViconDataStreamSDK::CPP::StreamMode::ClientPull );
+        // Set the global up axis
+        MyClient.SetAxisMapping( Direction::Forward, Direction::Left,
+                Direction::Up ); // Z-up
+
+        //geting information==============================================
+
+        Output_GetVersion _Output_GetVersion = MyClient.GetVersion();
+        std::cout << "Version: " << _Output_GetVersion.Major << "." 
+            << _Output_GetVersion.Minor << "." 
+            << _Output_GetVersion.Point << std::endl;
+
+        //socket interface toward the phone(StarL)========================
+        if ((numbytes = sendto(sockfd, msg, strlen(msg), 0,
+                        p->ai_addr, p->ai_addrlen)) == -1) {
+            perror("talker: sendto");
+            exit(1);
+        }
+        freeaddrinfo(servinfo);
+        std::cout<<"talker: sent "<<numbytes<<"bytes to "<<HOSTADDR<<":"<<SERVERPORT<<std::endl;
     }
-    freeaddrinfo(servinfo);
-    std::cout<<"talker: sent "<<numbytes<<"bytes to "<<HOSTADDR<<":"<<SERVERPORT<<std::endl;
     close(sockfd);
     return 0;
 }
-
