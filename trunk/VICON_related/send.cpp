@@ -173,6 +173,7 @@ std::string DroneIP = "192.168.1.10";
 std::string VICONHost = "192.168.1.125:801";//port always is 801
 std::string LogFile = "";
 std::string MulticastAddress = "244.0.0.0:44801";
+std::string wayPoints = "";
 bool ConnectToMultiCast = false;
 bool EnableMultiCast = false;
 
@@ -204,6 +205,9 @@ int main(int argc, char *argv[])
     if (p == NULL) {
         std::cout<<"talker: failed to create socket"<<std::endl;
         return 2;
+    }
+    else{
+        std::cout<<"talker: socket create SUCCESS"<<std::endl;
     }
 
     Client MyClient;

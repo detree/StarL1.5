@@ -1,5 +1,7 @@
 package edu.illinois.mitra.starl.comms;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -28,7 +30,7 @@ import edu.illinois.mitra.starl.objects.PositionList;
  * @version 1.0
  */
 public class UdpGpsReceiver extends Thread implements GpsReceiver {
-	private static final String TAG = "GPSReceiver";
+	private static final String TAG = "UdpGPSReceiver";
 	private static final String ERR = "Critical Error";
 	
 	public PositionList robotPositions;
@@ -64,9 +66,21 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 			gvh.log.e(TAG, "Unable to create socket!");
 			e.printStackTrace();
 		}
-		
+		WaypointHelper();
+
 		gvh.log.i(TAG, "Listening to GPS host on port " + port);
 		gvh.trace.traceEvent(TAG, "Created", gvh.time());
+	}
+
+	private final int[] mypos = {0,0,0};//the pos of the robot
+	private final int[][] goalpos = {{10,0,0},{-10,0,0},{0,10,0},{0,-10,0}};
+	private void WaypointHelper(){
+		Log.i("TAG", "using preset waypoints");
+		for(int i=0; i<goalpos.length; i++){
+			ItemPosition temp = new ItemPosition("Goal"+Integer.toString(i),
+					goalpos[i][0], goalpos[i][1], goalpos[i][2]);
+			this.waypointPositions.update(temp);
+		}
 	}
 
 	@Override

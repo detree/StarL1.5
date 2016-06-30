@@ -98,11 +98,15 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     }
 
     private double getDistance(){
-        if(timecount>=100000) {
-            timecount=0;
-            return 0.0;
-        }
-        else
+//        if(timecount>=100000) {
+//            timecount=0;
+//            return 0.0;
+//        }
+//        else
+        if(mypos==null)
+            Log.e(TAG, "mypos is null");
+        if(dest==null)
+            Log.e(TAG, "dest is null");
             return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
     }
 
@@ -115,7 +119,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                 //Log.i("Automation ARDrone2", "Thread running, but skipping");
                 continue;
             }
-            if(inMotion) timecount++;
+//            if(inMotion) timecount++;
             //Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
             double distance = 0;
             if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF) {
@@ -147,7 +151,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                         next = STAGE.GOAL;
                     }
                     else {
-                        cmd.move(dest.x - mypos.x, dest.y - mypos.y, 0, 0).doFor(1);
+                        cmd.move((dest.x - mypos.x)/100, (dest.y - mypos.y)/100, 0, 0).doFor(1);
                         next = STAGE.MOVE;
                     }
                     break;
