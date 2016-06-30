@@ -167,7 +167,7 @@ int main( int argc, char* argv[] )
 {
   // Program options
   
-  std::string HostName = "192.17.178.232:801";
+  std::string HostName = "192.168.1.106:801";//port always is 801
   if( argc > 1 )
   {
     HostName = argv[1];
@@ -284,9 +284,9 @@ int main( int argc, char* argv[] )
     std::cout << "Device Data Enabled: "           << Adapt( MyClient.IsDeviceDataEnabled().Enabled )          << std::endl;
 
     // Set the streaming mode
-    //MyClient.SetStreamMode( ViconDataStreamSDK::CPP::StreamMode::ClientPull );
+    MyClient.SetStreamMode( ViconDataStreamSDK::CPP::StreamMode::ClientPull );
     // MyClient.SetStreamMode( ViconDataStreamSDK::CPP::StreamMode::ClientPullPreFetch );
-    MyClient.SetStreamMode( ViconDataStreamSDK::CPP::StreamMode::ServerPush );
+    //MyClient.SetStreamMode( ViconDataStreamSDK::CPP::StreamMode::ServerPush );
 
     // Set the global up axis
     MyClient.SetAxisMapping( Direction::Forward, 

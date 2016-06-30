@@ -12,7 +12,7 @@ import edu.illinois.mitra.starl.objects.ObstacleList;
  * Created by SC on 6/7/16.
  */
 public class MotionAutomation_ARDrone2 extends RobotMotion {
-    protected static final String TAG = "MotionAutomaton";
+    protected static final String TAG = "MotionAutomaton ARDrone2";
     protected static final String ERR = "Critical Error";
     final int safeHeight = 10;//TODO need to see the unit
 
@@ -79,8 +79,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     @Override
     public void motion_stop() {
-        //land();
-        //stage = STAGE.LAND;
+//        land();
+        stage = STAGE.LAND;
         this.dest = null;
         running = false;
         inMotion = false;
@@ -128,7 +128,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     if(distance <= 0.5 ){//param.GOAL_RADIUS){
                         next = STAGE.GOAL;
                     }
-//                    cmd.takeOff();
+                    cmd.takeOff();
                     next = STAGE.TAKEOFF;
                     break;
                 case TAKEOFF:
@@ -142,17 +142,17 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                 case MOVE:
                     inMotion = true;
                     if(mypos.z < safeHeight)
-//                        cmd.move(0, 0, Math.abs(safeHeight-mypos.z), 0).doFor(1);
+                        cmd.move(0, 0, Math.abs(safeHeight-mypos.z), 0).doFor(1);
                     if(distance <= 0.5 ){//param.GOAL_RADIUS){ notice: only for curretn demos
                         next = STAGE.GOAL;
                     }
                     else {
-//                        cmd.move(dest.x - mypos.x, dest.y - mypos.y, 0, 0).doFor(1);
+                        cmd.move(dest.x - mypos.x, dest.y - mypos.y, 0, 0).doFor(1);
                         next = STAGE.MOVE;
                     }
                     break;
                 case HOVER:
-//                    cmd.hover();
+                    cmd.hover();
                     next = STAGE.HOVER;
                     inMotion = false;
                     break;
@@ -167,7 +167,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     inMotion = false;
                     break;
                 case LAND:
-//                    cmd.landing();
+                    cmd.landing();
                     try {
                         sleep(300, 0);
                     } catch (Exception exc){
@@ -186,9 +186,9 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     @Override
     public synchronized void start() {
         mypos = (ModelARDrone2) gvh.plat.getModel();
-        //mypos.initialize();
+        mypos.initialize();
         cmd = ((ModelARDrone2)gvh.plat.getModel()).cmd;
-        //running = true;
+        running = true;
         inMotion = true;
         super.start();
         gvh.log.d(TAG, "STARTED!");

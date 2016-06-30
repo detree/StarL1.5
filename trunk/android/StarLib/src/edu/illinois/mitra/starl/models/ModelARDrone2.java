@@ -54,13 +54,13 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
         String[] parts = descStr.replace(",", "").split("\\|");
         if(parts.length==10){
             this.name = parts[1];
-            this.ipAddr = parts[2];
             this.x = Integer.parseInt(parts[2]);
             this.y = Integer.parseInt(parts[3]);
             this.z = Integer.parseInt(parts[4]);
             this.currYaw = Integer.parseInt(parts[5]);
             this.currPitch = Integer.parseInt(parts[6]);
             this.currRoll = Integer.parseInt(parts[7]);
+            this.ipAddr = parts[8];
         } else {
             throw new ItemFormattingException("Should be length 10, is length " + parts.length);
         }
@@ -71,13 +71,13 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
         String[] parts = descStr.replace(",", "").split("\\|");
         if(parts.length==10){
             this.name = parts[1];
-            this.ipAddr = parts[2];
             this.x = Integer.parseInt(parts[2]);
             this.y = Integer.parseInt(parts[3]);
             this.z = Integer.parseInt(parts[4]);
             this.currYaw = Integer.parseInt(parts[5]);
             this.currPitch = Integer.parseInt(parts[6]);
             this.currRoll = Integer.parseInt(parts[7]);
+            this.ipAddr = parts[8];
         } else {
             throw new ItemFormattingException("Should be length 10, is length " + parts.length);
         }
@@ -137,7 +137,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
 
     private void initHelper(){
         if(this.ipAddr==null)
-            this.ipAddr = "192.168.1.1";
+            this.ipAddr = "192.168.1.127";
         droneInstance = new ARDrone(ipAddr, null);
         vX=0;
         vY=0;
@@ -152,7 +152,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
     @Override
     public void initialize(){
         try{
-            Log.i("Model ARDrone2", "initialization called");
+            Log.i("Model ARDrone2", "initialization called, this.ip="+this.ipAddr);
             droneInstance.reset();
             droneInstance.start();
             cmd = droneInstance.getCommandManager();

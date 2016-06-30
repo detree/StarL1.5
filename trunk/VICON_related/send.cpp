@@ -166,10 +166,11 @@ namespace
 
 
 //=======================Global Info and Flags=======================
-const char* HOSTADDR= "10.194.57.127";
+const char* HOSTADDR= "192.168.1.124";
 const char* SERVERPORT = "4000";
+std::string DroneIP = "192.168.1.10";
 //std::string VICONHost = "192.17.178.232:801";//port always is 801
-std::string VICONHost = "192.168.1.106:801";//port always is 801
+std::string VICONHost = "192.168.1.125:801";//port always is 801
 std::string LogFile = "";
 std::string MulticastAddress = "244.0.0.0:44801";
 bool ConnectToMultiCast = false;
@@ -206,10 +207,54 @@ int main(int argc, char *argv[])
     }
 
     Client MyClient;
+    //initialize VICON======================================================
+    std::cout << "Connecting to " << VICONHost << " ..." << std::flush;
+    while( !MyClient.IsConnected().Connected )
+    {
+        bool ok = false;
+        if(ConnectToMultiCast)
+        {
+            // Multicast connection
+            ok = ( MyClient.ConnectToMulticast( VICONHost , MulticastAddress ).Result 
+                    == Result::Success );
+        }
+        else
+        {
+            ok =( MyClient.Connect( VICONHost ).Result == Result::Success );
+        }
+        if(!ok)
+            std::cout << "Warning - connect failed... Retry." << std::endl;
+        usleep(200);
+        std::cout << std::endl;
+    }
+    // Enable some different data types
+    MyClient.EnableSegmentData();
+    MyClient.EnableMarkerData();
+    MyClient.EnableUnlabeledMarkerData();
+    MyClient.EnableDeviceData();
+    std::cout << "Segment Data Enabled: "
+        << Adapt( MyClient.IsSegmentDataEnabled().Enabled )<< std::endl;
+    std::cout << "Marker Data Enabled: "
+        << Adapt( MyClient.IsMarkerDataEnabled().Enabled )<< std::endl;
+    std::cout << "Unlabeled Marker Data Enabled: "
+        << Adapt( MyClient.IsUnlabeledMarkerDataEnabled().Enabled )<< std::endl;
+    std::cout << "Device Data Enabled: "
+        << Adapt( MyClient.IsDeviceDataEnabled().Enabled )<< std::endl;
+    // Set the streaming mode
+    MyClient.SetStreamMode( ViconDataStreamSDK::CPP::StreamMode::ClientPull );
+    // Set the global up axis
+    MyClient.SetAxisMapping( Direction::Forward, Direction::Left,
+            Direction::Up ); // Z-up
+
+    Output_GetVersion _Output_GetVersion = MyClient.GetVersion();
+    std::cout << "Version: " << _Output_GetVersion.Major << "." 
+        << _Output_GetVersion.Minor << "." 
+        << _Output_GetVersion.Point << std::endl;
+
+    //geting and send information==============================================
+    static unsigned int msgCounter = 0;
     while(true)
     {
-        //initialize VICON======================================================
-        std::cout << "Connecting to " << VICONHost << " ..." << std::flush;
         while( !MyClient.IsConnected().Connected )
         {
             bool ok = false;
@@ -229,40 +274,81 @@ int main(int argc, char *argv[])
             usleep(200);
             std::cout << std::endl;
         }
-        // Enable some different data types
-        MyClient.EnableSegmentData();
-        MyClient.EnableMarkerData();
-        MyClient.EnableUnlabeledMarkerData();
-        MyClient.EnableDeviceData();
-        std::cout << "Segment Data Enabled: "
-            << Adapt( MyClient.IsSegmentDataEnabled().Enabled )<< std::endl;
-        std::cout << "Marker Data Enabled: "
-            << Adapt( MyClient.IsMarkerDataEnabled().Enabled )<< std::endl;
-        std::cout << "Unlabeled Marker Data Enabled: "
-            << Adapt( MyClient.IsUnlabeledMarkerDataEnabled().Enabled )<< std::endl;
-        std::cout << "Device Data Enabled: "
-            << Adapt( MyClient.IsDeviceDataEnabled().Enabled )<< std::endl;
-        // Set the streaming mode
-        MyClient.SetStreamMode( ViconDataStreamSDK::CPP::StreamMode::ClientPull );
-        // Set the global up axis
-        MyClient.SetAxisMapping( Direction::Forward, Direction::Left,
-                Direction::Up ); // Z-up
+        // Get a frame
+        output_stream << "Waiting for new frame...";
+        while( MyClient.GetFrame().Result != Result::Success )
+        {
+            // Sleep a little so that we don't lumber the CPU with a busy poll
+#ifdef WIN32
+            Sleep( 200 );
+#else
+            usleep( 200);
+#endif
+            output_stream << ".";
+        }
+        output_stream << std::endl;
+        output_stream << "Latency: " << MyClient.GetLatencyTotal().Total << "s" << std::endl;
+        unsigned int SubjectCount = MyClient.GetSubjectCount().SubjectCount;
+        output_stream << "Subjects (" << SubjectCount << "):" << std::endl;
+        std::string outToStarL=""; //the final output string to the StarL UDP port
+        for( unsigned int SubjectIndex = 0 ; SubjectIndex < SubjectCount ; ++SubjectIndex )
+        {
+            output_stream << "  Subject #" << SubjectIndex << std::endl;
+            // Get the subject name
+            std::string SubjectName = MyClient.GetSubjectName( SubjectIndex ).SubjectName;
+            output_stream << "    Name: " << SubjectName << std::endl;
+            // Get the root segment
+            std::string RootSegment = MyClient.GetSubjectRootSegmentName( SubjectName ).SegmentName;
+            output_stream << "    Root Segment: " << RootSegment << std::endl;
+            // Count the number of segments
+            unsigned int SegmentCount = MyClient.GetSegmentCount( SubjectName ).SegmentCount;
+            output_stream << "    Segments (" << SegmentCount << "):" << std::endl;
 
-        //geting information==============================================
+            for( unsigned int SegmentIndex = 0 ; SegmentIndex < SegmentCount ; ++SegmentIndex )
+            {
+                output_stream << "      Segment #" << SegmentIndex << std::endl;
+                // Get the segment name
+                std::string SegmentName = MyClient.GetSegmentName( SubjectName, SegmentIndex ).SegmentName;
+                output_stream << "        Name: " << SegmentName << std::endl;
+                outToStarL = "%|" + SegmentName + "|"; 
 
-        Output_GetVersion _Output_GetVersion = MyClient.GetVersion();
-        std::cout << "Version: " << _Output_GetVersion.Major << "." 
-            << _Output_GetVersion.Minor << "." 
-            << _Output_GetVersion.Point << std::endl;
+                // Get the global segment translation
+                Output_GetSegmentGlobalTranslation _Output_GetSegmentGlobalTranslation = 
+                    MyClient.GetSegmentGlobalTranslation( SubjectName, SegmentName );
+                output_stream << "        Global Translation: (" << _Output_GetSegmentGlobalTranslation.Translation[ 0 ]  << ", " 
+                    << _Output_GetSegmentGlobalTranslation.Translation[ 1 ]  << ", " 
+                    << _Output_GetSegmentGlobalTranslation.Translation[ 2 ]  << ") " 
+                    << Adapt( _Output_GetSegmentGlobalTranslation.Occluded ) << std::endl;
+                outToStarL += ( std::to_string((int)_Output_GetSegmentGlobalTranslation.Translation[ 0 ]) + "|" +
+                        std::to_string((int)_Output_GetSegmentGlobalTranslation.Translation[ 1 ]) + "|" +
+                        std::to_string((int)_Output_GetSegmentGlobalTranslation.Translation[ 2 ]) + "|");
+                //until now, "%|name|x|y|z|"
 
+
+                // Get the global segment rotation in helical co-ordinates
+                Output_GetSegmentGlobalRotationHelical _Output_GetSegmentGlobalRotationHelical = 
+                    MyClient.GetSegmentGlobalRotationHelical( SubjectName, SegmentName );
+                output_stream << "        Global Rotation Helical: (" << _Output_GetSegmentGlobalRotationHelical.Rotation[ 0 ]     << ", " 
+                    << _Output_GetSegmentGlobalRotationHelical.Rotation[ 1 ]     << ", " 
+                    << _Output_GetSegmentGlobalRotationHelical.Rotation[ 2 ]     << ") " 
+                    << Adapt( _Output_GetSegmentGlobalRotationHelical.Occluded ) << std::endl;
+                outToStarL += ( std::to_string((int)_Output_GetSegmentGlobalRotationHelical.Rotation[ 0 ]) + "|" +
+                        std::to_string((int)_Output_GetSegmentGlobalRotationHelical.Rotation[ 1 ]) + "|" +
+                        std::to_string((int)_Output_GetSegmentGlobalRotationHelical.Rotation[ 2 ]) + "|");
+                //until now, "%|name|x|y|z|angle1|angle2|angle3|"
+                outToStarL += DroneIP + "|";
+                //until now, "%|name|x|y|z|angle1|angle2|angle3|xx.xx.xx.xx|"
+                outToStarL += "&\n";
+            }
+            std::cout<<"the msg to StarL:"<<outToStarL<<std::endl;
+        }
         //socket interface toward the phone(StarL)========================
-        if ((numbytes = sendto(sockfd, msg, strlen(msg), 0,
+        if ((numbytes = sendto(sockfd, outToStarL.c_str(), outToStarL.size(), 0,
                         p->ai_addr, p->ai_addrlen)) == -1) {
             perror("talker: sendto");
-            exit(1);
         }
-        freeaddrinfo(servinfo);
         std::cout<<"talker: sent "<<numbytes<<"bytes to "<<HOSTADDR<<":"<<SERVERPORT<<std::endl;
+        usleep(10*1000);
     }
     close(sockfd);
     return 0;
