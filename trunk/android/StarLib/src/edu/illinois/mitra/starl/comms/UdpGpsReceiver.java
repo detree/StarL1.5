@@ -32,12 +32,12 @@ import edu.illinois.mitra.starl.objects.PositionList;
 public class UdpGpsReceiver extends Thread implements GpsReceiver {
 	private static final String TAG = "UdpGPSReceiver";
 	private static final String ERR = "Critical Error";
-	
+
 	public PositionList robotPositions;
 	public PositionList<ItemPosition> waypointPositions;
 	public ObstacleList obs;
 	public Vector<ObstacleList> viewsOfWorld;
-	
+
 
 	private GlobalVarHolder gvh;
 
@@ -52,7 +52,7 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 						  Vector<ObstacleList> viewsOfWorld) {
 		super();
 		this.gvh = gvh;
-		
+
 		name = gvh.id.getName();
 		this.robotPositions = robotPositions;
 		this.waypointPositions = waypointPositions;
@@ -92,145 +92,145 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 
 	@Override
 	public void run() {
-    		byte[] buf = new byte[2048]; 
-    		
-    		while(running) {
-    	    	try {
-		    	// Receive a message
-    			DatagramPacket packet = new DatagramPacket(buf, buf.length); 
+		byte[] buf = new byte[2048];
+
+		while(running) {
+			try {
+				// Receive a message
+				DatagramPacket packet = new DatagramPacket(buf, buf.length);
 				mSocket.receive(packet);
-    			InetAddress remoteIP = packet.getAddress();
-    			if(remoteIP.equals(myLocalIP))
-    				continue;
+				InetAddress remoteIP = packet.getAddress();
+				if(remoteIP.equals(myLocalIP))
+					continue;
 
-    			String line = new String(packet.getData(), 0, packet.getLength());
-    		
-    			// Parse the received string
-    			String [] parts = line.split("\n");
-    			if(received == false) {
-    				gvh.log.i(TAG, "RECEIVED FIRST PACKET!");
-    				gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_LOCATION, HandlerMessage.GPS_RECEIVING);
-    				received = true;
-    			}    			
-    			for(int i = 0; i < parts.length; i++) {
-    				if(parts[i].length() >= 2) {
-		    			switch(parts[i].charAt(0)) {
-		    			case '@':
-		    				try {
-		    					ItemPosition newpos = new ItemPosition(parts[i]);
-		    					waypointPositions.update(newpos, gvh.time());
-		    					gvh.trace.traceEvent(TAG, "Received Waypoint", newpos, gvh.time());
-		    				} catch(ItemFormattingException e){
-		    					gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
-		    				}
-		    				break;
+				String line = new String(packet.getData(), 0, packet.getLength());
 
-		    			case '#':
-		    				try {
-		    					Model_iRobot newpos = new Model_iRobot(parts[i]);
-		    					robotPositions.update(newpos, gvh.time());
-		    					gvh.sendRobotEvent(Event.GPS);
-		    					if(newpos.name.equals(name)) {
-		    						gvh.trace.traceEvent(TAG, "Received Position", newpos, gvh.time());
-		    						gvh.sendRobotEvent(Event.GPS_SELF);
-		    					}
-		    				} catch(ItemFormattingException e){
-		    					gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
-		    				}
-		    				break;
-		    			case '$':
-		    				try {
-		    					Model_quadcopter newpos = new Model_quadcopter(parts[i]);
-		    					robotPositions.update(newpos, gvh.time());
-		    					gvh.sendRobotEvent(Event.GPS);
-		    					if(newpos.name.equals(name)) {
-		    						gvh.trace.traceEvent(TAG, "Received Position", newpos, gvh.time());
-		    						gvh.sendRobotEvent(Event.GPS_SELF);
-		    					}
-		    				} catch(ItemFormattingException e){
-		    					gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
-		    				}
-		    				break;
-						case '%':
-							try {
-								String[] subparts = parts[i].replace(",", "").split("\\|");
-								ModelARDrone2 oldpos = (ModelARDrone2) robotPositions.getPosition(subparts[1]);
-								ModelARDrone2 newpos;
-								if(oldpos != null)
-									newpos = new ModelARDrone2(parts[i], oldpos);
-								else
-									newpos = new ModelARDrone2(parts[i]);
-								robotPositions.update(newpos, gvh.time());
-								gvh.sendRobotEvent(Event.GPS);
-								if(newpos.name.equals(name)) {
-									gvh.trace.traceEvent(TAG, "Received Position", newpos, gvh.time());
-									gvh.sendRobotEvent(Event.GPS_SELF);
+				// Parse the received string
+				String [] parts = line.split("\n");
+				if(received == false) {
+					gvh.log.i(TAG, "RECEIVED FIRST PACKET!");
+					gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_LOCATION, HandlerMessage.GPS_RECEIVING);
+					received = true;
+				}
+				for(int i = 0; i < parts.length; i++) {
+					if(parts[i].length() >= 2) {
+						switch(parts[i].charAt(0)) {
+							case '@':
+								try {
+									ItemPosition newpos = new ItemPosition(parts[i]);
+									waypointPositions.update(newpos, gvh.time());
+									gvh.trace.traceEvent(TAG, "Received Waypoint", newpos, gvh.time());
+								} catch(ItemFormattingException e){
+									gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
 								}
-							} catch(ItemFormattingException e){
-								gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
-							}
-							break;
-		    			case 'G':
-		    				gvh.trace.traceEvent(TAG, "Received launch command", gvh.time());
-		    				int[] args = Common.partsToInts(parts[i].substring(3).split(" "));
-		    				gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_LAUNCH, args[0], args[1]);
-		    				break;
-		    			case 'A':
-		    				gvh.trace.traceEvent(TAG, "Received abort command", gvh.time());
-		    				gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_ABORT, null);
-		    				break;
-		    			default:
-		    				gvh.log.e(ERR, "Unknown GPS message received: " + line);
-		    				break;
-		    			}
-    				}
-    			}
+								break;
+
+							case '#':
+								try {
+									Model_iRobot newpos = new Model_iRobot(parts[i]);
+									robotPositions.update(newpos, gvh.time());
+									gvh.sendRobotEvent(Event.GPS);
+									if(newpos.name.equals(name)) {
+										gvh.trace.traceEvent(TAG, "Received Position", newpos, gvh.time());
+										gvh.sendRobotEvent(Event.GPS_SELF);
+									}
+								} catch(ItemFormattingException e){
+									gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
+								}
+								break;
+							case '$':
+								try {
+									Model_quadcopter newpos = new Model_quadcopter(parts[i]);
+									robotPositions.update(newpos, gvh.time());
+									gvh.sendRobotEvent(Event.GPS);
+									if(newpos.name.equals(name)) {
+										gvh.trace.traceEvent(TAG, "Received Position", newpos, gvh.time());
+										gvh.sendRobotEvent(Event.GPS_SELF);
+									}
+								} catch(ItemFormattingException e){
+									gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
+								}
+								break;
+							case '%':
+								try {
+									String[] subparts = parts[i].replace(",", "").split("\\|");
+									ModelARDrone2 oldpos = (ModelARDrone2) robotPositions.getPosition(subparts[1]);
+									ModelARDrone2 newpos;
+									if(oldpos != null)
+										newpos = new ModelARDrone2(parts[i], oldpos);
+									else
+										newpos = new ModelARDrone2(parts[i]);
+									robotPositions.update(newpos, gvh.time());
+									gvh.sendRobotEvent(Event.GPS);
+									if(newpos.name.equals(name)) {
+										gvh.trace.traceEvent(TAG, "Received Position", newpos, gvh.time());
+										gvh.sendRobotEvent(Event.GPS_SELF);
+									}
+								} catch(ItemFormattingException e){
+									gvh.log.e(TAG, "Invalid item formatting: " + e.getError());
+								}
+								break;
+							case 'G':
+								gvh.trace.traceEvent(TAG, "Received launch command", gvh.time());
+								int[] args = Common.partsToInts(parts[i].substring(3).split(" "));
+								gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_LAUNCH, args[0], args[1]);
+								break;
+							case 'A':
+								gvh.trace.traceEvent(TAG, "Received abort command", gvh.time());
+								gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_ABORT, null);
+								break;
+							default:
+								gvh.log.e(ERR, "Unknown GPS message received: " + line);
+								break;
+						}
+					}
+				}
 			} catch (IOException e) {
 				gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_LOCATION, HandlerMessage.GPS_OFFLINE);
 			}
-    	}
+		}
 	}
-	
-    private InetAddress getLocalAddress() throws IOException {
+
+	private InetAddress getLocalAddress() throws IOException {
 		try {
-		    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-		        NetworkInterface intf = en.nextElement();
-		        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-		            InetAddress inetAddress = enumIpAddr.nextElement();
-		            if (!inetAddress.isLoopbackAddress()) {
-		            	return inetAddress;
-		            }
-		        }
-		    }
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = en.nextElement();
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = enumIpAddr.nextElement();
+					if (!inetAddress.isLoopbackAddress()) {
+						return inetAddress;
+					}
+				}
+			}
 		} catch (SocketException ex) {
-		    gvh.log.e(TAG, ex.toString());
+			gvh.log.e(TAG, ex.toString());
 		}
 		return null;
-    }
-    
-    /* (non-Javadoc)
-	 * @see edu.illinois.mitra.starl.comms.GpsReceiver#cancel()
-	 */
-    @Override
-    public void cancel() {
-    	running = false;
-    	gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_LOCATION, HandlerMessage.GPS_OFFLINE);
-        try {
-        	mSocket.disconnect();
-            mSocket.close();
-        } catch (Exception e) {
-            gvh.log.e(ERR, "close of connect socket failed" + e);
-            e.printStackTrace();
-        }
-        gvh.log.i(TAG, "Closed UDP GPS socket");
+	}
+
+	/* (non-Javadoc)
+     * @see edu.illinois.mitra.starl.comms.GpsReceiver#cancel()
+     */
+	@Override
+	public void cancel() {
+		running = false;
+		gvh.plat.sendMainMsg(HandlerMessage.MESSAGE_LOCATION, HandlerMessage.GPS_OFFLINE);
+		try {
+			mSocket.disconnect();
+			mSocket.close();
+		} catch (Exception e) {
+			gvh.log.e(ERR, "close of connect socket failed" + e);
+			e.printStackTrace();
+		}
+		gvh.log.i(TAG, "Closed UDP GPS socket");
 		gvh.trace.traceEvent(TAG, "cancelled", gvh.time());
-    }
+	}
 
 	@Override
 	public PositionList<ItemPosition> getWaypoints() {
 		return waypointPositions;
 	}
-	
+
 	@Override
 	public ObstacleList getObspoints() {
 		return obs;
@@ -251,7 +251,7 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 	public PositionList<ItemPosition> get_robots() {
 		return robotPositions;
 	}
-	
-	
-	
+
+
+
 }
