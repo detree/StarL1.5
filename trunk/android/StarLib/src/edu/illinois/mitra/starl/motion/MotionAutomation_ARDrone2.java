@@ -12,7 +12,7 @@ import edu.illinois.mitra.starl.objects.ObstacleList;
  * Created by SC on 6/7/16.
  */
 public class MotionAutomation_ARDrone2 extends RobotMotion {
-    protected static final String TAG = "MotionAutomaton ARDrone2";
+    protected static final String TAG = "MotionAuto ARDrone2";
     protected static final String ERR = "Critical Error";
     final int safeHeight = 10;//TODO need to see the unit
 
@@ -54,11 +54,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     public void goTo(ItemPosition dest) {
         Log.i("Automation ARDrone2", "GoTo called!!!");
-        try {
-            sleep(1000, 0);
-        } catch (Exception exc){
-            exc.printStackTrace();
-        }
         if( this.dest == null || (!inMotion && !this.dest.equals(dest))) {
             done = false;
             this.dest = new ItemPosition(dest.name,dest.x,dest.y,dest.z);
@@ -194,7 +189,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     @Override
     public synchronized void start() {
         mypos = (ModelARDrone2) gvh.plat.getModel();
-        mypos.initialize();
+        if(mypos.cmd==null)
+            mypos.initialize();
         cmd = ((ModelARDrone2)gvh.plat.getModel()).cmd;
         running = true;
         inMotion = true;

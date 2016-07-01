@@ -106,8 +106,13 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
     }
 
     private void CopySetupDrone(ModelARDrone2 old) throws ItemFormattingException{
-        if(old.ipAddr == null || old.droneInstance == null || old.cmd == null)
-            throw new ItemFormattingException("The OLD drone does not seems to be properly set up");
+        if(old.ipAddr == null || old.droneInstance == null || old.cmd == null) {
+            String out = "The OLD drone does not seems to be properly set up.";
+            if(old.ipAddr==null) out+=" no IPADDR.";
+            if(old.droneInstance==null) out+=" no DR_INSTANCE.";
+            if(old.cmd==null) out+=" no CMD.";
+            throw new ItemFormattingException(out);
+        }
         this.ipAddr = old.ipAddr;
         this.droneInstance = old.droneInstance;
         this.cmd = old.cmd;
@@ -137,7 +142,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
 
     private void initHelper(){
         if(this.ipAddr==null)
-            this.ipAddr = "192.168.1.127";
+            this.ipAddr = "192.168.1.10";
         droneInstance = new ARDrone(ipAddr, null);
         vX=0;
         vY=0;

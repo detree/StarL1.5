@@ -156,10 +156,12 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 									String[] subparts = parts[i].replace(",", "").split("\\|");
 									ModelARDrone2 oldpos = (ModelARDrone2) robotPositions.getPosition(subparts[1]);
 									ModelARDrone2 newpos;
-									if(oldpos != null)
+									if(oldpos != null )
 										newpos = new ModelARDrone2(parts[i], oldpos);
-									else
+									else {
 										newpos = new ModelARDrone2(parts[i]);
+										newpos.initialize();
+									}
 									robotPositions.update(newpos, gvh.time());
 									gvh.sendRobotEvent(Event.GPS);
 									if(newpos.name.equals(name)) {
