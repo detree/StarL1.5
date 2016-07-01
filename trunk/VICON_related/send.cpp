@@ -344,7 +344,7 @@ int main(int argc, char *argv[])
                 //until now, "%|name|x|y|z|angle1|angle2|angle3|xx.xx.xx.xx|"
                 outToStarL += "&\n";
             }
-            std::cout<<"the msg to StarL:"<<outToStarL<<std::endl;
+            std::cout<<"the msg to StarL:"<<outToStarL;
         }
         //socket interface toward the phone(StarL)========================
         if ((numbytes = sendto(sockfd, outToStarL.c_str(), outToStarL.size(), 0,
