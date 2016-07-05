@@ -18,7 +18,7 @@ import edu.illinois.mitra.starl.objects.ObstacleList;
 public class MotionAutomation_ARDrone2 extends RobotMotion {
     protected static final String TAG = "MotionAuto ARDrone2";
     protected static final String ERR = "Critical Error";
-    final int safeHeight = 10;//TODO need to see the unit
+    final int safeHeight = 400;//TODO need to see the unit
 
     protected GlobalVarHolder gvh;
 
@@ -55,6 +55,14 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         public void attitudeUpdated(float pitch, float roll) { ;}
         public void windCompensation(float pitch, float roll) { ;}
     }
+    class ARDrone2_BatteryListn implements de.yadrone.base.navdata.BatteryListener{
+        private String TAG = "Battery Info";
+        public void batteryLevelChanged(int var1){
+            if(var1<20)
+                Log.e(TAG, "Low battery:"+var1+"%");
+        }
+        public void voltageChanged(int var1){;}
+    }
     private void HardwareInit(){
         if(droneInstance == null)
             Log.e(TAG, "wrong order in init hardware. droneInstance=null.");
@@ -64,6 +72,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             cmd = droneInstance.getCommandManager();
             nav = droneInstance.getNavDataManager();
             nav.addAttitudeListener(new ARDrone2_AttitudeListn(mypos.name));
+            nav.addBatteryListener(new ARDrone2_BatteryListn());
             droneInstance.setSpeed(maxSpeed);
             cmd.setOutdoor(outdoor, outdoor);
             cmd.setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10);//some sig for us
@@ -77,6 +86,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     public synchronized void start() {
         mypos = (ModelARDrone2) gvh.plat.getModel();
         droneInstance = new ARDrone(mypos.ipAddr, null);
+        Log.i(TAG, "drone instance created with IP "+mypos.ipAddr);
         HardwareInit();
         running = true;
         inMotion = true;
@@ -116,7 +126,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         if( this.dest == null || (!inMotion && !this.dest.equals(dest))) {
             done = false;
             this.dest = new ItemPosition(dest.name,dest.x,dest.y,dest.z);
-            Log.i("Automation ARDrone2", "GoTo passed!!!");
+//            Log.i("Automation ARDrone2", "GoTo passed!!!");
 //            this.dest = new ItemPosition("temp", 1, 0, 0);
             motionStart();
             Log.i("Automation ARDrone2", "GoTo Executed!!!");
@@ -175,14 +185,15 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 //            if(inMotion) timecount++;
             //Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
             double distance = 0;
+            if(colliding) continue;
+            mypos = (ModelARDrone2) gvh.gps.getMyPosition();
             if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF) {
                 distance = getDistance();
-                //Log.i("curr dest ", "("+dest.x+","+dest.y+","+dest.z+")" + " timecount=" + Integer.toString(timecount)+ " dist=" + Double.toString(distance));
             }
-            if(colliding) continue;
+            Log.d(TAG, "from ("+mypos.x+","+mypos.y+","+mypos.z+") to ("+dest.x+","+dest.y+","+dest.z+")" + "STATE:"+StageToString(stage));
             switch (stage){
                 case INIT:
-                    if(distance <= 0.5 ){//param.GOAL_RADIUS){
+                    if(distance <= param.GOAL_RADIUS){
                         next = STAGE.GOAL;
                     }
                     cmd.takeOff();
@@ -199,12 +210,17 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                 case MOVE:
                     inMotion = true;
                     if(mypos.z < safeHeight)
-                        cmd.move(0, 0, Math.abs(safeHeight-mypos.z), 0).doFor(1);
-                    if(distance <= 0.5 ){//param.GOAL_RADIUS){ notice: only for curretn demos
+                        cmd.move(0, 0, 1, 0).doFor(1);
+                    if(distance <= param.GOAL_RADIUS){ //notice: only for curretn demos
                         next = STAGE.GOAL;
                     }
                     else {
-                        cmd.move((dest.x - mypos.x)/100, (dest.y - mypos.y)/100, 0, 0).doFor(1);
+                        int vx=0, vy=0;
+                        if(dest.x - mypos.x>0) vx=1;
+                        if(dest.y - mypos.y>0) vy=1;
+                        if(dest.x - mypos.x<0) vx=-1;
+                        if(dest.y - mypos.y<0) vy=-1;
+                        cmd.move(vx,vy, 0, 0).doFor(1);
                         next = STAGE.MOVE;
                     }
                     break;

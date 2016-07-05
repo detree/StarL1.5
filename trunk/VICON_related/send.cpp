@@ -166,11 +166,11 @@ namespace
 
 
 //=======================Global Info and Flags=======================
-const char* HOSTADDR= "192.168.1.124";
+const char* HOSTADDR= "192.168.1.103";
 const char* SERVERPORT = "4000";
 std::string DroneIP = "192.168.1.10";
 //std::string VICONHost = "192.17.178.232:801";//port always is 801
-std::string VICONHost = "192.168.1.125:801";//port always is 801
+std::string VICONHost = "192.168.1.105:801";//port always is 801
 std::string LogFile = "";
 std::string MulticastAddress = "244.0.0.0:44801";
 std::string wayPoints = "";

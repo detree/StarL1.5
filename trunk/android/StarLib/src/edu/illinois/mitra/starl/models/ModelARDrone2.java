@@ -56,11 +56,12 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
         this.currPitch = 0;
         this.currRoll = 0;
         initHelper();
+        Log.i("Model ARDrone2", this.name + "constructor called, this.ip="+this.ipAddr);
     }
 
     private void initHelper(){
         if(this.ipAddr==null)
-            this.ipAddr = "10.194.57.127";
+            this.ipAddr = "192.168.1.10";
         vX=0;
         vY=0;
         vZ=0;
@@ -71,7 +72,6 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
 
     @Override
     public void initialize(){
-        Log.i("Model ARDrone2", "initialization called, this.ip="+this.ipAddr);
     }
 
     //TODO, temp stub here
