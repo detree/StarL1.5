@@ -1,7 +1,5 @@
 package edu.illinois.mitra.starl.objects;
 
-import android.util.Log;
-
 import java.util.HashMap;
 
 import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
@@ -13,8 +11,8 @@ import edu.illinois.mitra.starl.exceptions.ItemFormattingException;
  * @version 2.0
  */
 public class ItemPosition extends Point3d implements Comparable<ItemPosition>{
-//	private static final String TAG = "itemPosition";
-//	private static final String ERR = "Critical Error";
+	private static final String TAG = "itemPosition";
+	private static final String ERR = "Critical Error";
 	
 	public String name;
 	public int index;
