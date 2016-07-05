@@ -73,7 +73,7 @@ public class UdpGpsReceiver extends Thread implements GpsReceiver {
 	}
 
 	private final int[] mypos = {0,0,0};//the pos of the robot
-	private final int[][] goalpos = {{200,0,0},{-200,0,0},{0,200,0},{0,-200,0}};
+	private final int[][] goalpos = {{-942,918,0},{-1000,-1400,0},{1000,-1400,0},{1000,1400,0}};
 	private void WaypointHelper(){
 		Log.i("TAG", "using preset waypoints");
 		for(int i=0; i<goalpos.length; i++){

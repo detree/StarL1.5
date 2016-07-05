@@ -170,6 +170,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             Log.e(TAG, "dest is null");
             return Math.sqrt(Math.pow((mypos.x - 0), 2) + Math.pow((mypos.y - 0), 2));
         }
+        Log.d(TAG, "from ("+mypos.x+","+mypos.y+","+mypos.z+") to ("+dest.x+","+dest.y+","+dest.z+")" + "STATE:"+StageToString(stage));
         return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
     }
 
@@ -190,7 +191,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF) {
                 distance = getDistance();
             }
-            Log.d(TAG, "from ("+mypos.x+","+mypos.y+","+mypos.z+") to ("+dest.x+","+dest.y+","+dest.z+")" + "STATE:"+StageToString(stage));
             switch (stage){
                 case INIT:
                     if(distance <= param.GOAL_RADIUS){
