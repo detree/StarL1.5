@@ -2,7 +2,11 @@ package edu.illinois.mitra.starl.motion;
 
 import android.util.Log;
 
+import de.yadrone.base.ARDrone;
+import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
+import de.yadrone.base.command.LEDAnimation;
+import de.yadrone.base.navdata.NavDataManager;
 import edu.illinois.mitra.starl.gvh.GlobalVarHolder;
 import edu.illinois.mitra.starl.models.ModelARDrone2;
 import edu.illinois.mitra.starl.objects.ItemPosition;
@@ -17,7 +21,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     final int safeHeight = 10;//TODO need to see the unit
 
     protected GlobalVarHolder gvh;
-    protected CommandManager cmd;//need? TODO, see ModelARDrone2.java
 
     //Motion Tracking
     protected ItemPosition dest = null;
@@ -31,6 +34,62 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     volatile protected boolean running = false;
     boolean colliding = false;
     private static int timecount;//notice: only for the test of dummyGPS
+
+
+    //=========================hardware related==========================
+    public IARDrone droneInstance = null;
+    protected CommandManager cmd;//need? TODO, see ModelARDrone2.java
+    private NavDataManager nav;
+    private int maxSpeed = 2;
+    private boolean outdoor = false;
+    class ARDrone2_AttitudeListn implements de.yadrone.base.navdata.AttitudeListener{
+        private String tag = "AttitudeInfo";
+        ARDrone2_AttitudeListn(String name){
+            tag = name;
+        }
+        public void attitudeUpdated(float pitch, float roll, float yaw)
+        {
+            //Log.i(tag + " rcvData", "Pitch: " + pitch + " Roll: " + roll + " Yaw: " + yaw);
+        }
+
+        public void attitudeUpdated(float pitch, float roll) { ;}
+        public void windCompensation(float pitch, float roll) { ;}
+    }
+    private void HardwareInit(){
+        if(droneInstance == null)
+            Log.e(TAG, "wrong order in init hardware. droneInstance=null.");
+        try{
+            droneInstance.reset();
+            droneInstance.start();
+            cmd = droneInstance.getCommandManager();
+            nav = droneInstance.getNavDataManager();
+            nav.addAttitudeListener(new ARDrone2_AttitudeListn(mypos.name));
+            droneInstance.setSpeed(maxSpeed);
+            cmd.setOutdoor(outdoor, outdoor);
+            cmd.setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10);//some sig for us
+        }catch (Exception exc)
+        {
+            exc.printStackTrace();
+        }
+    }
+    //====================================================
+    @Override
+    public synchronized void start() {
+        mypos = (ModelARDrone2) gvh.plat.getModel();
+        droneInstance = new ARDrone(mypos.ipAddr, null);
+        HardwareInit();
+        running = true;
+        inMotion = true;
+        super.start();
+        gvh.log.d(TAG, "STARTED!");
+    }
+
+
+    public void cancel(){
+        running = false;
+        //TODO maybe? some command to disconnect the hardware.
+    }
+
 
     //TODO need to pass some more parameters into this param
     private volatile MotionParameters param = MotionParameters.defaultParameters();
@@ -85,13 +144,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     public void motion_resume() {
         running = true;
     }
+
     //====================================================
-
-    public void cancel(){
-        running = false;
-        //TODO maybe? some command to disconnect the hardware.
-    }
-
     private double getDistance(){
 //        if(timecount>=100000) {
 //            timecount=0;
@@ -184,18 +238,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             prev = stage;
             stage = next;
         }
-    }
-
-    @Override
-    public synchronized void start() {
-        mypos = (ModelARDrone2) gvh.plat.getModel();
-        if(mypos.cmd==null)
-            mypos.initialize();
-        cmd = ((ModelARDrone2)gvh.plat.getModel()).cmd;
-        running = true;
-        inMotion = true;
-        super.start();
-        gvh.log.d(TAG, "STARTED!");
     }
 
     private String StageToString(STAGE curr)
