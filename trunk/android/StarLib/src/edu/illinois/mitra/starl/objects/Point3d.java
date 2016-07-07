@@ -54,7 +54,6 @@ public class Point3d implements Traceable {
 	 
 	public Point3d(int x, int y, int z) {
 		//constructor for calculation temp point
-		Log.i("ItemPosition", "reach here");
 		this.x = x;
 		this.y = y;
 		this.z = z;

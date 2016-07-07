@@ -31,7 +31,7 @@ public class BotInfoSelector {
                 ip = "192.168.1.114"; // reserved IP address of red MotoE phone
             }
             else if(deviceType == Common.HTCONEM7){
-                ip = "192.168.1.2"; // FixMe: need to figure out
+                ip = "192.168.1.10"; // FixMe: need to figure out
             }
             if(type == Common.IROBOT) {
                 bluetooth = "5C:F3:70:75:BB:0E"; // bluetooth address of red raspberry pi on red irobot
