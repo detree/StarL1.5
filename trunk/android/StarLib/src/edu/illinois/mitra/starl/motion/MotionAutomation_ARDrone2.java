@@ -35,6 +35,19 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     boolean colliding = false;
     private static int timecount;//notice: only for the test of dummyGPS
 
+    //control logic related
+    double saturationLimit = 50;
+    double windUpLimit = 185;
+    int filterLength = 8;
+    double Kpx = 0.0714669809792096;
+    double Kpy = 0.0714669809792096;
+    double Kix = 0.0110786899216426;
+    double Kiy = 0.0110786899216426;
+    double Kdx = 0.113205037832174;
+    double Kdy = 0.113205037832174;
+    PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
+    PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
+
 
     //=========================hardware related==========================
     public IARDrone droneInstance = null;
@@ -126,8 +139,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         if( this.dest == null || (!inMotion && !this.dest.equals(dest))) {
             done = false;
             this.dest = new ItemPosition(dest.name,dest.x,dest.y,dest.z);
-//            Log.i("Automation ARDrone2", "GoTo passed!!!");
-//            this.dest = new ItemPosition("temp", 1, 0, 0);
             motionStart();
             Log.i("Automation ARDrone2", "GoTo Executed!!!");
         }
@@ -143,7 +154,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     @Override
     public void motion_stop() {
-//        land();
         stage = STAGE.LAND;
         this.dest = null;
         running = false;
@@ -157,11 +167,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     //====================================================
     private double getDistance(){
-//        if(timecount>=100000) {
-//            timecount=0;
-//            return 0.0;
-//        }
-//        else
         if(mypos==null) {
             Log.e(TAG, "mypos is null");
             return Math.sqrt(Math.pow((0 - dest.x), 2) + Math.pow((0 - dest.y), 2));
@@ -215,12 +220,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                         next = STAGE.GOAL;
                     }
                     else {
-                        int vx=0, vy=0;
-                        if(dest.x - mypos.x>0) vx=1;
-                        if(dest.y - mypos.y>0) vy=1;
-                        if(dest.x - mypos.x<0) vx=-1;
-                        if(dest.y - mypos.y<0) vy=-1;
-                        cmd.move(vx,vy, 0, 0).doFor(1);
+//                        cmd.move(vx,vy, 0, 0).doFor(1);
+                        float rollCommand = (float)PID_x.getCommand(mypos.x, dest.x);
+                        float pitchCommand = (float)PID_y.getCommand(mypos.y, dest.y);
+                        float vertSpeed= 0;
+                        float spinSpeed= 0;
+                        cmd.move(rollCommand, pitchCommand, vertSpeed, spinSpeed).doFor(1);
                         next = STAGE.MOVE;
                     }
                     break;
