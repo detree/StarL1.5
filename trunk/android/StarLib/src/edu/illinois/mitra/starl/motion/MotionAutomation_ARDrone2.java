@@ -18,7 +18,7 @@ import edu.illinois.mitra.starl.objects.ObstacleList;
 public class MotionAutomation_ARDrone2 extends RobotMotion {
     protected static final String TAG = "MotionAuto ARDrone2";
     protected static final String ERR = "Critical Error";
-    final int safeHeight = 400;//TODO need to see the unit
+    final int safeHeight = 1000;//TODO need to see the unit
 
     protected GlobalVarHolder gvh;
 
@@ -39,12 +39,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     double saturationLimit = 50;
     double windUpLimit = 185;
     int filterLength = 8;
-    double Kpx = 0.0714669809792096;
-    double Kpy = 0.0714669809792096;
-    double Kix = 0.0110786899216426;
-    double Kiy = 0.0110786899216426;
-    double Kdx = 0.113205037832174;
-    double Kdy = 0.113205037832174;
+    double Kpx = 0.000714669809792096;
+    double Kpy = 0.000714669809792096;
+    double Kix = 0.000110786899216426;
+    double Kiy = 0.000110786899216426;
+    double Kdx = 0.00113205037832174;
+    double Kdy = 0.00113205037832174;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
     PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
 
@@ -84,10 +84,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             droneInstance.start();
             cmd = droneInstance.getCommandManager();
             nav = droneInstance.getNavDataManager();
+            cmd.setOutdoor(outdoor, outdoor);
             nav.addAttitudeListener(new ARDrone2_AttitudeListn(mypos.name));
             nav.addBatteryListener(new ARDrone2_BatteryListn());
             droneInstance.setSpeed(maxSpeed);
-            cmd.setOutdoor(outdoor, outdoor);
+            cmd.setMaxAltitude(1500);
+            cmd.setMinAltitude(1000);
             cmd.setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10);//some sig for us
         }catch (Exception exc)
         {
@@ -165,7 +167,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         running = true;
     }
 
-    //====================================================
+    //=======================private helpers=============================
     private double getDistance(){
         if(mypos==null) {
             Log.e(TAG, "mypos is null");
@@ -178,6 +180,35 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         Log.d(TAG, "from ("+mypos.x+","+mypos.y+","+mypos.z+") to ("+dest.x+","+dest.y+","+dest.z+")" + "STATE:"+StageToString(stage));
         return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
     }
+    private double ScaleByLimit(double in, double absLimit){
+        if(in < 0 && in < -absLimit)
+            return -absLimit;
+        else if(in > 0 && in > absLimit)
+            return absLimit;
+        return in;
+    }
+    private double ScaleByLimit(double in){
+        if(in < 0 && in < 1.0)
+            return -1.0;
+        else if(in > 0 && in > 1.0)
+            return 1.0;
+        return in;
+    }
+
+    private void CalculatedMove(){
+        double MURatio = -0.06;
+        double desiredAccX = PID_x.getCommand(mypos.x, dest.x);
+        double desiredAccY = PID_y.getCommand(mypos.y, dest.y);
+        double rollOut, pitchOut, vertVOut, spinVOut;
+        rollOut = MURatio * (desiredAccY * Math.cos(mypos.currYaw) -
+                                desiredAccX * Math.sin(mypos.currYaw));
+        pitchOut= MURatio * (desiredAccY * Math.sin(mypos.currYaw) -
+                desiredAccX * Math.cos(mypos.currYaw));
+//        cmd.move((float)rollOut, (float)pitchOut, (float)verVOut, (float)spinVOut);
+        Log.i(TAG, "accl=" + (float)desiredAccX+ "," + (float)desiredAccY);
+        Log.i(TAG, "move=" + (float)rollOut + "," + (float)pitchOut);
+    }
+
 
     @Override
     public void run(){
@@ -188,7 +219,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                 //Log.i("Automation ARDrone2", "Thread running, but skipping");
                 continue;
             }
-//            if(inMotion) timecount++;
             //Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
             double distance = 0;
             if(colliding) continue;
@@ -214,18 +244,18 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     break;
                 case MOVE:
                     inMotion = true;
-                    if(mypos.z < safeHeight)
-                        cmd.move(0, 0, 1, 0).doFor(1);
+//                    if(mypos.z < safeHeight)
+//                        cmd.move(0, 0, 1, 0).doFor(1);
                     if(distance <= param.GOAL_RADIUS){ //notice: only for curretn demos
                         next = STAGE.GOAL;
                     }
                     else {
-//                        cmd.move(vx,vy, 0, 0).doFor(1);
-                        float rollCommand = (float)PID_x.getCommand(mypos.x, dest.x);
-                        float pitchCommand = (float)PID_y.getCommand(mypos.y, dest.y);
-                        float vertSpeed= 0;
-                        float spinSpeed= 0;
-                        cmd.move(rollCommand, pitchCommand, vertSpeed, spinSpeed).doFor(1);
+                        this.CalculatedMove();
+//                        float rollCommand = (float)PID_x.getCommand(mypos.x, dest.x);
+//                        float pitchCommand = (float)PID_y.getCommand(mypos.y, dest.y);
+//                        float vertSpeed= 0;
+//                        float spinSpeed= 0;
+//                        cmd.move(rollCommand, pitchCommand, vertSpeed, spinSpeed).doFor(1);
                         next = STAGE.MOVE;
                     }
                     break;
