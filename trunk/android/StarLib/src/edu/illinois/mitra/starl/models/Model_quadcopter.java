@@ -87,9 +87,9 @@ public class Model_quadcopter extends ItemPosition implements TrackedRobot{
 			this.x = Integer.parseInt(parts[2]);
 			this.y = Integer.parseInt(parts[3]);
 			this.z = Integer.parseInt(parts[4]);
-			this.yaw = Integer.parseInt(parts[5]);
-			this.pitch = Integer.parseInt(parts[6]);
-			this.roll = Integer.parseInt(parts[7]);			
+			this.pitch= Integer.parseInt(parts[5]);
+			this.roll= Integer.parseInt(parts[6]);
+			this.yaw= Integer.parseInt(parts[7]);
 		} else {
 			throw new ItemFormattingException("Should be length 9, is length " + parts.length);
 		}

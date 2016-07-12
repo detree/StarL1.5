@@ -1,5 +1,6 @@
 package edu.illinois.mitra.starl.motion;
 
+import android.graphics.Point;
 import android.util.Log;
 
 import de.yadrone.base.ARDrone;
@@ -84,12 +85,14 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             droneInstance.start();
             cmd = droneInstance.getCommandManager();
             nav = droneInstance.getNavDataManager();
+            for(int tt=0;tt<100;tt++)//clear the potential emergency signal
+                cmd.emergency();
             cmd.setOutdoor(outdoor, outdoor);
             nav.addAttitudeListener(new ARDrone2_AttitudeListn(mypos.name));
             nav.addBatteryListener(new ARDrone2_BatteryListn());
             droneInstance.setSpeed(maxSpeed);
-            cmd.setMaxAltitude(1500);
-            cmd.setMinAltitude(1000);
+            cmd.setMaxAltitude(1200);
+            cmd.setMinAltitude(600);
             cmd.setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10);//some sig for us
         }catch (Exception exc)
         {
@@ -177,7 +180,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             Log.e(TAG, "dest is null");
             return Math.sqrt(Math.pow((mypos.x - 0), 2) + Math.pow((mypos.y - 0), 2));
         }
-        Log.d(TAG, "from ("+mypos.x+","+mypos.y+","+mypos.z+") to ("+dest.x+","+dest.y+","+dest.z+")" + "STATE:"+StageToString(stage));
         return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
     }
     private double ScaleByLimit(double in, double absLimit){
@@ -195,18 +197,23 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         return in;
     }
 
+    static Point oldpos = new Point(19381,-238482); //a random impossible starting place
     private void CalculatedMove(){
-        double MURatio = -0.06;
-        double desiredAccX = PID_x.getCommand(mypos.x, dest.x);
-        double desiredAccY = PID_y.getCommand(mypos.y, dest.y);
-        double rollOut, pitchOut, vertVOut, spinVOut;
-        rollOut = MURatio * (desiredAccY * Math.cos(mypos.currYaw) -
-                                desiredAccX * Math.sin(mypos.currYaw));
-        pitchOut= MURatio * (desiredAccY * Math.sin(mypos.currYaw) -
-                desiredAccX * Math.cos(mypos.currYaw));
-//        cmd.move((float)rollOut, (float)pitchOut, (float)verVOut, (float)spinVOut);
-        Log.i(TAG, "accl=" + (float)desiredAccX+ "," + (float)desiredAccY);
-        Log.i(TAG, "move=" + (float)rollOut + "," + (float)pitchOut);
+        double MURatio = 0.1;
+        double desiredAccX = ScaleByLimit( PID_x.getCommand(mypos.x, dest.x) );
+        double desiredAccY = ScaleByLimit( PID_y.getCommand(mypos.y, dest.y) );
+        double rollOut, pitchOut, vertVOut=0, spinVOut=0;
+        pitchOut = -MURatio * (desiredAccY * Math.cos( mypos.currYaw/360.0D*2.0D*Math.PI ) -
+                                desiredAccX * Math.sin( mypos.currYaw/360.0D*2.0D*Math.PI ) );
+        rollOut= MURatio * (desiredAccY * Math.sin( mypos.currYaw/360.0D*2.0D*Math.PI ) -
+                                desiredAccX * Math.cos( mypos.currYaw/360.0D*2.0D*Math.PI ) );
+        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut);
+        if(!oldpos.equals(mypos.x, mypos.y)) {
+            oldpos.set(mypos.x, mypos.y);
+            Log.d(TAG, "from (" + mypos.x + "," + mypos.y + "," + mypos.z + ") to (" + dest.x + "," + dest.y + "," + dest.z + ")" + "STATE:" + StageToString(stage));
+            Log.i(TAG, "accl=" + (float) desiredAccX + "," + (float) desiredAccY);
+            Log.d(TAG, "move=" + (float) rollOut + "," + (float) pitchOut);
+        }
     }
 
 
