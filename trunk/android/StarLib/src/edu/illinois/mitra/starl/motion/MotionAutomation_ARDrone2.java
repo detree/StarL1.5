@@ -42,8 +42,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     int filterLength = 8;
     double Kpx = 0.0000714669809792096;
     double Kpy = 0.0000714669809792096;
-    double Kix = 0.0000110786899216426;
-    double Kiy = 0.0000110786899216426;
+    double Kix = 0;
+    double Kiy = 0;
     double Kdx = 0.000113205037832174;
     double Kdy = 0.000113205037832174;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
