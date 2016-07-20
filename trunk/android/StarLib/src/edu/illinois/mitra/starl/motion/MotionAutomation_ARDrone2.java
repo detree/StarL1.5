@@ -39,13 +39,13 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     //control logic related
     double saturationLimit = 50;
     double windUpLimit = 185;
-    int filterLength = 8;
-    double Kpx = 0.0000714669809792096;
-    double Kpy = 0.0000714669809792096;
+    int filterLength = 1;
+    double Kpx = 0.0001414669809792096;
+    double Kpy = 0.0001414669809792096;
     double Kix = 0;
     double Kiy = 0;
-    double Kdx = 0.000113205037832174;
-    double Kdy = 0.000113205037832174;
+    double Kdx = 0.000263205037832174;
+    double Kdy = 0.000263205037832174;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
     PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
 
@@ -84,17 +84,17 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             Log.e(TAG, "wrong order in init hardware. droneInstance=null.");
         try{
             droneInstance.reset();
-            droneInstance.start();
+            //droneInstance.start();
             cmd = droneInstance.getCommandManager();
             nav = droneInstance.getNavDataManager();
-            for(int tt=0;tt<100;tt++)//clear the potential emergency signal
+//            for(int tt=0;tt<100;tt++)//clear the potential emergency signal
                 cmd.emergency();
             cmd.setOutdoor(outdoor, outdoor);
             nav.addAttitudeListener(new ARDrone2_AttitudeListn(mypos.name));
             nav.addBatteryListener(new ARDrone2_BatteryListn());
             droneInstance.setSpeed(maxSpeed);
             cmd.setMaxAltitude(1200);
-            cmd.setMinAltitude(600);
+            cmd.setMinAltitude(50);
             cmd.setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10);//some sig for us
         }catch (Exception exc)
         {
@@ -201,21 +201,23 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     static Point oldpos = new Point(19381,-238482); //a random impossible starting place
     private void CalculatedMove(){
-        double MURatio = 0.25;
+        double MURatio = 0.025;
         //change axis to adapt to the paper.
-        double desiredAccY = ScaleByLimit(PID_x.getCommand(mypos.x, dest.x), 10.0);
-        double desiredAccX = ScaleByLimit(PID_y.getCommand(mypos.y, dest.y), 10.0);
+        double desiredAccX = ScaleByLimit(PID_x.getCommand(mypos.x, dest.x), 10.0);
+        double desiredAccY = ScaleByLimit(PID_y.getCommand(mypos.y, dest.y), 10.0);
         double rollOut, pitchOut, vertVOut=0, spinVOut=0;
-        rollOut = MURatio * (desiredAccY * Math.cos( mypos.currYaw/360.0D*2.0D*Math.PI ) -
-                                desiredAccX * Math.sin( mypos.currYaw/360.0D*2.0D*Math.PI ) );
-        pitchOut= -MURatio * (desiredAccY * Math.sin( mypos.currYaw/360.0D*2.0D*Math.PI ) -
-                                desiredAccX * Math.cos( mypos.currYaw/360.0D*2.0D*Math.PI ) );
-        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(10);
+        pitchOut =  Math.asin(MURatio * (desiredAccY * Math.cos(Math.toRadians(mypos.currYaw)) -
+                                desiredAccX * Math.sin(Math.toRadians(mypos.currYaw))) );
+        rollOut= Math.asin(-MURatio * (desiredAccY * Math.sin(Math.toRadians(mypos.currYaw )) -
+                                desiredAccX * Math.cos( Math.toRadians(mypos.currYaw))) );
+        spinVOut = 0.001 * ( Math.atan((dest.y-mypos.y)/(dest.x-mypos.x)) - mypos.currYaw );
+        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut);
         if(!oldpos.equals(mypos.x, mypos.y)) {
             oldpos.set(mypos.x, mypos.y);
-            Log.d(TAG, "from (" + mypos.x + "," + mypos.y + "," + mypos.z + ") to (" + dest.x + "," + dest.y + "," + dest.z + ")" + "STATE:" + StageToString(stage));
+            Log.d(TAG, "from (" + mypos.x + "," + mypos.y + "," + mypos.z + ") to (" + dest.x + "," + dest.y + "," + dest.z + ")" + " STATE:" + StageToString(stage));
             Log.i(TAG, "accl=" + (float) desiredAccX + "," + (float) desiredAccY);
-            Log.d(TAG, "move=" + (float) rollOut + "," + (float) pitchOut);
+            Log.d(TAG, "move(" + (float)rollOut + "," + (float)pitchOut+ "," + (float)vertVOut+ "," + (float)spinVOut +")");
+//            Log.d(TAG, "seq#=" + cmd.getSeq());
         }
     }
 

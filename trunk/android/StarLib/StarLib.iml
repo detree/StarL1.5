@@ -44,5 +44,6 @@
     <orderEntry type="library" name="libARCommands" level="project" />
     <orderEntry type="library" name="jmdns" level="project" />
     <orderEntry type="library" name="yadrone_032" level="project" />
+    <orderEntry type="library" name="yadrone_self" level="project" />
   </component>
 </module>

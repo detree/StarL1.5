@@ -45,3 +45,5 @@ Thumbs.db
 trunk/android/.idea/workspace.xml
 
 *.o
+
+*.out

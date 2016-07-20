@@ -2,8 +2,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 const char MYPORT[] = "5556";   // the port users will be connecting to
-const int MAXBUFLEN = 100;
+const int MAXBUFLEN = 200;
 //                   XxxxxXXXXxxxxXXXXxxxxXXXXxxxx
 const int REFKEY = 0b10001010101000000000000000000;
 // get sockaddr, IPv4 or IPv6:
@@ -18,7 +19,7 @@ void *get_in_addr(struct sockaddr *sa)
 enum {PURE_FL, PURE_INT, PURE_STR, BASIC_CMD} para_type;
 
 void interpret(char* in){
-    FILE* outto = stderr;
+    FILE* outto = stdout;
     union{
         int myint;
         float myfloat;
@@ -33,46 +34,50 @@ void interpret(char* in){
     int para_num = 0;
     if( !strcmp(head, "PCMD") )
     {
-        fprintf(outto, "MOVE4\n");
+        fprintf(outto, "[MOVE4]\t");
+        fflush(outto);
         para_type = PURE_FL;
         para_num = 4;
     }
     else if( !strcmp(head, "CONFIG_IDS") )
     {
-        fprintf(outto, "CONFIG_ID\n");
+        fprintf(outto, "[CONFIG_ID]\t");
+        fflush(outto);
         para_type = PURE_STR;
         para_num = 3;
     }
     else if( !strcmp(head, "REF") )
     {
-        fprintf(outto, "BASIC_CMD\n");
+        fprintf(outto, "[BASIC_CMD]\t");
+        fflush(outto);
         para_type = BASIC_CMD;
     }
     else
     {
-        printf("Unknown header \"%s\"\n", head);
+        fprintf(stderr, "Unknown header \"%s\"\n", head);
+        fflush(outto);
     }
     count = strtok(NULL, ",");
     fprintf(outto, "#%s, parameter:(", count);
-
+    fflush(outto);
+    
     //parse the parameters=================================================
     if(para_type == PURE_FL)
     {
         data = strtok(NULL, "\"");
-        //printf("%s\n", data);
         float *paras = NULL;
         paras = malloc( para_num * sizeof(float) );
         char *end = NULL;
         for(ii=0; ii<para_num; ii++)
         {
-            val.myint = strtol(data, &end, 10); 
-            //printf("para%d=%d,\tin float=%f\n", ii, val.myint, val.myfloat);
-            paras[ii]=val.myfloat;       
-            if(ii!=0) printf(",");
+            val.myint = strtol(data, &end, 10);
+            paras[ii]=val.myfloat;
+            if(ii!=0) fprintf(outto, ",");
+            fflush(outto);
             fprintf(outto, "%f", paras[ii]);
+            fflush(outto);
             data = end+1;
         }
-        printf(")\n");
     }
     else if(para_type == PURE_STR)
     {
@@ -83,20 +88,24 @@ void interpret(char* in){
         char *end = NULL;
         paras[0] = data;
         fprintf(outto, "%s", paras[0]);
+        fflush(outto);
         for(ii=1; ii<para_num; ii++)
         {
             paras[ii] = strtok(NULL, ",");
-            if(ii!=0) printf(",");
+            if(ii!=0) fprintf(outto, ",");
+            fflush(outto);
             fprintf(outto, "%s", paras[ii]);
+            fflush(outto);
         }
     }
     else if(para_type == BASIC_CMD)
     {
         data = strtok(NULL, "\"");
-        val.myint = strtol(data, NULL, 10); 
+        val.myint = strtol(data, NULL, 10);
         if( (val.myint & REFKEY) != REFKEY || ((val.myint & (~0x300)) & (~REFKEY)) != 0)
         {
             fprintf(stderr, "data=%d\n", val.myint);
+            fflush(outto);
             perror("wrong formatting");
         }
         else
@@ -105,15 +114,17 @@ void interpret(char* in){
                 fprintf(outto, "Emergency");
             else if( (val.myint & 0x200) !=0)
                 fprintf(outto, "Take Off");
+            fflush(outto);
         }
     }
     fprintf(outto, ")\n");
+    fflush(outto);
 }
 
 
 int main(void)
 {
-    char test[]="AT*REF=176,290717952cddeeff\",\"bbccddee\",\"aabbccdd\"";
+    char test[]="AT*PCMD=598562,1,1016225096,-2147483648,0,0\"aabbccdd\"";
     interpret(test);
     int sockfd;
     struct addrinfo hints, *servinfo, *p;
@@ -134,7 +145,7 @@ int main(void)
     // loop through all the results and bind to the first we can
     for(p = servinfo; p != NULL; p = p->ai_next) {
         if ((sockfd = socket(p->ai_family, p->ai_socktype,
-                        p->ai_protocol)) == -1) {
+                             p->ai_protocol)) == -1) {
             perror("listener: socket");
             continue; }
         if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
@@ -153,7 +164,7 @@ int main(void)
         //printf("listener: waiting to recvfrom...\n");
         addr_len = sizeof their_addr;
         if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0,
-                        (struct sockaddr *)&their_addr, &addr_len)) == -1) {
+                                 (struct sockaddr *)&their_addr, &addr_len)) == -1) {
             perror("recvfrom");
             exit(1);
         }
@@ -162,13 +173,14 @@ int main(void)
         //        inet_ntop(their_addr.ss_family,
         //            get_in_addr((struct sockaddr *)&their_addr),
         //            s, sizeof(s) ) );
-        //printf("listener: packet is %d bytes long\n", numbytes);
+        fprintf(stderr, "listener: packet is %d bytes long\n", numbytes);
         buf[numbytes] = '\0';
-        puts("listener: packet contains");
-        puts(buf);
-        //interpret(buf);
-
+        //puts("listener: packet contains");
+        //puts(buf);
+        interpret(buf);
+        usleep(100000);
     }
     close(sockfd);
     return 0;
 }
+
