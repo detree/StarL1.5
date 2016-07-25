@@ -1,7 +1,9 @@
 StarL1.5
 ========
-This is the master branch for development, for stable release, please select branch "1.5"
+## Branches
+Master branch is a older development branch, specifically it is without the new hardware support. For all development for the new hardware, please see branches under `ARDrone-dev`. For stable release, please select branch "1.5"
 
+## Introduction
 StarL (Stabilizing Robotics Programming Language) is a programming library for developing distributed robotic algorithms.
 
 See our research wiki:
@@ -11,10 +13,10 @@ StarL1.5 with 5 demo applications
 See getStarted.pdf for detailed instructions on how to set up StarL on both ADT and Android Studio.
 
 How to set up StarL
-1. Download and install the JDK1.7 and JRE1.7 at 
+1. Download and install the JDK1.7 and JRE1.7 at
 http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
-2. Download and install the latest Android Studio or ADT. 
+2. Download and install the latest Android Studio or ADT.
 http://developer.android.com/sdk/index.html
 (We just migrated to Android Studio, please contact us if you are encountering problems)
 
