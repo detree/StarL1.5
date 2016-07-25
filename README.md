@@ -1,7 +1,7 @@
 StarL1.5
 ========
 ## Branches
-Master branch is a older development branch, specifically it is without the new hardware support. For all development for the new hardware, please see branches under `ARDrone-dev`. For stable release, please select branch "1.5"
+`Master` branch is a older development branch, specifically it is without the new hardware support. For all development for the new hardware, please see branches under `ARDrone-dev`. For stable release, please select branch `1.5`
 
 ## Introduction
 StarL (Stabilizing Robotics Programming Language) is a programming library for developing distributed robotic algorithms.
