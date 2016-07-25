@@ -37,15 +37,15 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     private static int timecount;//notice: only for the test of dummyGPS
 
     //control logic related
-    double saturationLimit = 50;
-    double windUpLimit = 185;
-    int filterLength = 1;
-    double Kpx = 0.0001414669809792096;
-    double Kpy = 0.0001414669809792096;
+    double saturationLimit = 10;
+    double windUpLimit = 30;
+    int filterLength = 2;
+    double Kpx = 0.00007414669809792096;
+    double Kpy = 0.00007414669809792096;
     double Kix = 0;
     double Kiy = 0;
-    double Kdx = 0.000263205037832174;
-    double Kdy = 0.000263205037832174;
+    double Kdx = 0.0000663205037832174;
+    double Kdy = 0.0000663205037832174;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
     PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
 
@@ -201,16 +201,19 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 
     static Point oldpos = new Point(19381,-238482); //a random impossible starting place
     private void CalculatedMove(){
-        double MURatio = 0.025;
+        double MURatio = 0.0485;
         //change axis to adapt to the paper.
-        double desiredAccX = ScaleByLimit(PID_x.getCommand(mypos.x, dest.x), 10.0);
-        double desiredAccY = ScaleByLimit(PID_y.getCommand(mypos.y, dest.y), 10.0);
+        double desiredAccX = PID_x.getCommand(mypos.x, dest.x);
+        double desiredAccY = PID_y.getCommand(mypos.y, dest.y);
         double rollOut, pitchOut, vertVOut=0, spinVOut=0;
         pitchOut =  Math.asin(MURatio * (desiredAccY * Math.cos(Math.toRadians(mypos.currYaw)) -
                                 desiredAccX * Math.sin(Math.toRadians(mypos.currYaw))) );
         rollOut= Math.asin(-MURatio * (desiredAccY * Math.sin(Math.toRadians(mypos.currYaw )) -
                                 desiredAccX * Math.cos( Math.toRadians(mypos.currYaw))) );
-        spinVOut = 0.001 * ( Math.atan((dest.y-mypos.y)/(dest.x-mypos.x)) - mypos.currYaw );
+        if(dest.x == mypos.x)
+            spinVOut = 0;
+        else
+            spinVOut = -0.0015 * ( Math.atan((dest.y-mypos.y)/(dest.x-mypos.x)) - Math.toRadians(mypos.currYaw) );
         cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut);
         if(!oldpos.equals(mypos.x, mypos.y)) {
             oldpos.set(mypos.x, mypos.y);
