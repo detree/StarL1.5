@@ -166,7 +166,8 @@ namespace
 
 
 //=======================Global Info and Flags=======================
-const char* HOSTADDR= "192.168.1.103";
+const double to_degree = 180.0/3.141592653589;
+const char* HOSTADDR= "192.168.1.108";
 const char* SERVERPORT = "4000";
 std::string DroneIP = "192.168.1.10";
 //std::string VICONHost = "192.17.178.232:801";//port always is 801
@@ -319,26 +320,26 @@ int main(int argc, char *argv[])
                 // Get the global segment translation
                 Output_GetSegmentGlobalTranslation _Output_GetSegmentGlobalTranslation = 
                     MyClient.GetSegmentGlobalTranslation( SubjectName, SegmentName );
-                output_stream << "        Global Translation: (" << _Output_GetSegmentGlobalTranslation.Translation[ 0 ]  << ", " 
-                    << _Output_GetSegmentGlobalTranslation.Translation[ 1 ]  << ", " 
-                    << _Output_GetSegmentGlobalTranslation.Translation[ 2 ]  << ") " 
-                    << Adapt( _Output_GetSegmentGlobalTranslation.Occluded ) << std::endl;
+                //output_stream << "        Global Translation: (" << _Output_GetSegmentGlobalTranslation.Translation[ 0 ]  << ", " 
+                //<< _Output_GetSegmentGlobalTranslation.Translation[ 1 ]  << ", " 
+                //<< _Output_GetSegmentGlobalTranslation.Translation[ 2 ]  << ") " 
+                //<< Adapt( _Output_GetSegmentGlobalTranslation.Occluded ) << std::endl;
                 outToStarL += ( std::to_string((int)_Output_GetSegmentGlobalTranslation.Translation[ 0 ]) + "|" +
                         std::to_string((int)_Output_GetSegmentGlobalTranslation.Translation[ 1 ]) + "|" +
                         std::to_string((int)_Output_GetSegmentGlobalTranslation.Translation[ 2 ]) + "|");
                 //until now, "%|name|x|y|z|"
 
 
-                // Get the global segment rotation in helical co-ordinates
-                Output_GetSegmentGlobalRotationHelical _Output_GetSegmentGlobalRotationHelical = 
-                    MyClient.GetSegmentGlobalRotationHelical( SubjectName, SegmentName );
-                output_stream << "        Global Rotation Helical: (" << _Output_GetSegmentGlobalRotationHelical.Rotation[ 0 ]     << ", " 
-                    << _Output_GetSegmentGlobalRotationHelical.Rotation[ 1 ]     << ", " 
-                    << _Output_GetSegmentGlobalRotationHelical.Rotation[ 2 ]     << ") " 
-                    << Adapt( _Output_GetSegmentGlobalRotationHelical.Occluded ) << std::endl;
-                outToStarL += ( std::to_string((int)_Output_GetSegmentGlobalRotationHelical.Rotation[ 0 ]) + "|" +
-                        std::to_string((int)_Output_GetSegmentGlobalRotationHelical.Rotation[ 1 ]) + "|" +
-                        std::to_string((int)_Output_GetSegmentGlobalRotationHelical.Rotation[ 2 ]) + "|");
+                // Get the local segment rotation in EulerXYZ co-ordinates
+                Output_GetSegmentLocalRotationEulerXYZ _Output_GetSegmentLocalRotationEulerXYZ = 
+                    MyClient.GetSegmentLocalRotationEulerXYZ( SubjectName, SegmentName );
+                output_stream << "        Local Rotation EulerXYZ: (" << _Output_GetSegmentLocalRotationEulerXYZ.Rotation[ 0 ]     << ", " 
+                    << _Output_GetSegmentLocalRotationEulerXYZ.Rotation[ 1 ]     << ", " 
+                    << _Output_GetSegmentLocalRotationEulerXYZ.Rotation[ 2 ]     << ") " 
+                    << Adapt( _Output_GetSegmentLocalRotationEulerXYZ.Occluded ) << std::endl;
+                outToStarL += ( std::to_string((int)(_Output_GetSegmentLocalRotationEulerXYZ.Rotation[ 0 ]*to_degree)) + "|" +
+                        std::to_string((int)(_Output_GetSegmentLocalRotationEulerXYZ.Rotation[ 1 ]*to_degree)) + "|" +
+                        std::to_string((int)(_Output_GetSegmentLocalRotationEulerXYZ.Rotation[ 2 ]*to_degree)) + "|");
                 //until now, "%|name|x|y|z|angle1|angle2|angle3|"
                 outToStarL += DroneIP + "|";
                 //until now, "%|name|x|y|z|angle1|angle2|angle3|xx.xx.xx.xx|"
@@ -352,7 +353,7 @@ int main(int argc, char *argv[])
             perror("talker: sendto");
         }
         std::cout<<"talker: sent "<<numbytes<<"bytes to "<<HOSTADDR<<":"<<SERVERPORT<<std::endl;
-        usleep(10*1000);
+        //usleep(10*1000);
     }
     close(sockfd);
     return 0;

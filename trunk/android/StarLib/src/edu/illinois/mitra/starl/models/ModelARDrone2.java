@@ -13,6 +13,7 @@ import edu.illinois.mitra.starl.objects.PositionList;
  * Created by SC on 6/6/16.
  */
 public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
+    String TAG = "ModelARDrone2";
     public String ipAddr;
     //the position/velocity/status information
     //angular velocity in radius/second, regular velocity in meter/second
@@ -31,10 +32,13 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
             this.x = Integer.parseInt(parts[2]);
             this.y = Integer.parseInt(parts[3]);
             this.z = Integer.parseInt(parts[4]);
-            this.currYaw = Integer.parseInt(parts[5]);
+            this.currRoll = Integer.parseInt(parts[5]);
             this.currPitch = Integer.parseInt(parts[6]);
-            this.currRoll = Integer.parseInt(parts[7]);
+            this.currYaw = Integer.parseInt(parts[7]);
             this.ipAddr = parts[8];
+//            Log.i(TAG, this.name + '|' + this.x + '|' + this.y + '|' + this.z + '|' +
+//                    this.currRoll + '|' + this.currPitch + '|'  + this.currYaw + '|'  +
+//                    this.ipAddr);
         } else {
             throw new ItemFormattingException("Should be length 10, is length " + parts.length);
         }
@@ -62,6 +66,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
     private void initHelper(){
         if(this.ipAddr==null)
             this.ipAddr = "192.168.1.10";
+//            this.ipAddr = "10.195.40.51";
         vX=0;
         vY=0;
         vZ=0;

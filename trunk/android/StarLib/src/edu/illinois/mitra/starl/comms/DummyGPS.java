@@ -28,7 +28,7 @@ public class DummyGPS extends Thread implements GpsReceiver {
     private boolean running = false;
 
     private final int[] mypos = {0,0,0};//the pos of the robot
-    private final int[][] goalpos = {{10,0,0},{-10,0,0},{0,10,0},{0,-10,0}};
+    private final int[][] goalpos = {{1000,0,0},{1000,0,0},{0,1000,0},{0,-1000,0}};
 
     public DummyGPS(GlobalVarHolder gvh){
         super();

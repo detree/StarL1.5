@@ -167,7 +167,7 @@ int main( int argc, char* argv[] )
 {
   // Program options
   
-  std::string HostName = "192.168.1.106:801";//port always is 801
+  std::string HostName = "192.168.1.105:801";//port always is 801
   if( argc > 1 )
   {
     HostName = argv[1];

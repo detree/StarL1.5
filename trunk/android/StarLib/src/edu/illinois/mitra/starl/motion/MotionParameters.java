@@ -137,7 +137,7 @@ public class MotionParameters {
 		private int TURNSPEED_MIN = 25;
 		private int LINSPEED_MAX = 250;
 		private int LINSPEED_MIN = 175;
-		private int GOAL_RADIUS = 75;
+		private int GOAL_RADIUS = 150;
 		private int SLOWFWD_RADIUS = 700;
 		private int SMALLTURN_ANGLE = 3;
 		private int SLOWTURN_ANGLE = 25;
