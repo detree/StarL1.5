@@ -178,7 +178,7 @@ int main(void)
         //puts("listener: packet contains");
         //puts(buf);
         interpret(buf);
-        usleep(100000);
+        //usleep(100000);
     }
     close(sockfd);
     return 0;

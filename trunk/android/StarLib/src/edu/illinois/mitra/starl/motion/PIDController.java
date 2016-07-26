@@ -74,7 +74,7 @@ public class PIDController {
         long deltaTime = currentTime - prevTime;
         prevTime = currentTime;
         // convert deltaTime to double and seconds
-        double deltaTimeDouble = deltaTime * 1e-9;
+        double deltaTimeDouble = deltaTime; //notice change from 1e-9
 
         // find accumulated error
         cumError += error;

@@ -56,7 +56,7 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
 
     public ModelARDrone2(String name, int x, int y, int z){
         super(name, x, y, z);
-        this.currYaw = 0;
+        this.currYaw = 40;
         this.currPitch = 0;
         this.currRoll = 0;
         initHelper();
@@ -65,8 +65,8 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
 
     private void initHelper(){
         if(this.ipAddr==null)
-            this.ipAddr = "192.168.1.10";
-//            this.ipAddr = "10.195.40.51";
+//            this.ipAddr = "192.168.1.10";
+            this.ipAddr = "10.195.40.51";
         vX=0;
         vY=0;
         vZ=0;
