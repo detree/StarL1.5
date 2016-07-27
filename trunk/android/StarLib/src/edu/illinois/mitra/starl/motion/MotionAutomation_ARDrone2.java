@@ -42,12 +42,15 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     int filterLength = 2;
     double Kpx = 0.0007414669809792096;
     double Kpy = 0.0007414669809792096;
+    double Kpyaw = 0.08;
     double Kix = 0;
     double Kiy = 0;
     double Kdx = 0.000663205037832174;
     double Kdy = 0.000663205037832174;
+    double Kdyaw = 0.12;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
     PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
+    PIDController PID_yaw = new PIDController(Kpyaw, 0, Kdyaw, 0.3, 0.3, 1);
 
 
     //=========================hardware related==========================
@@ -209,38 +212,31 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         //calculations================================================
         pitchOut =  Math.asin(MURatio * (desiredAccY * Math.cos(Math.toRadians(mypos.currYaw)) -
                                 desiredAccX * Math.sin(Math.toRadians(mypos.currYaw))) );
-        rollOut= Math.asin(-MURatio * (desiredAccY * Math.sin(Math.toRadians(mypos.currYaw )) -
+        rollOut = Math.asin(-MURatio * (desiredAccY * Math.sin(Math.toRadians(mypos.currYaw )) +
                                 desiredAccX * Math.cos( Math.toRadians(mypos.currYaw))) );
-        if(dest.y == mypos.y) {
-            if (dest.x > -mypos.x)
-                yawOut = -Math.PI / 2;
-            else
-                yawOut = Math.PI / 2;
-        }
-        else{
-            yawOut = Math.atan(( -dest.x- -mypos.x)/(dest.y - mypos.y));
-            if(-mypos.y > dest.y)
-                if(-mypos.x < dest.x)
-                    yawOut -= Math.PI;
-                else
-                    yawOut += Math.PI;
-        }
+        yawOut = Math.atan2(dest.y - mypos.y, dest.x - mypos.x);
+        if(yawOut < -Math.PI/2)
+            yawOut += (3.0/2.0*Math.PI);
+        else
+            yawOut -= (Math.PI/2.0);
         //to commands==============================================
         //notice: neg const since contradiction between direction of drone's movement and positive yaw direction===
-        spinVOut = -0.15 * (yawOut - Math.toRadians(mypos.currYaw));
-        if( Math.abs(yawOut) >= Math.toRadians(30) ){
+//        spinVOut = -0.09 * (yawOut - Math.toRadians(mypos.currYaw));
+        spinVOut = -PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
+//        if( Math.abs(yawOut) >= Math.toRadians(30) ){
             rollOut = 0;
             pitchOut = 0;
             vertVOut = 0;
-        }
-        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut);
-        //if(oldpos.equals(mypos.x, mypos.y)) {
+//        }
+        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
+        if(!oldpos.equals(mypos.x, mypos.y)) {
             oldpos.set(mypos.x, mypos.y);
-            Log.d(TAG, "from (" + mypos.x + "," + mypos.y + "," + mypos.z + ") to (" + dest.x + "," + dest.y + "," + dest.z + ")" + " STATE:" + StageToString(stage));
-            Log.i(TAG, "accl=" + (float) desiredAccY + "," + (float) desiredAccX);
-            Log.d(TAG, "move(" + (float)rollOut + "," + (float)pitchOut+ "," + (float)vertVOut+ "," + (float)Math.toDegrees(yawOut)+")");
+            Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
+                    + dest.x + "," + dest.y + "," + dest.z + ")  " + mypos.currYaw +"->" + (int) Math.toDegrees(yawOut)+"deg   " + //);
+            /*Log.i(TAG,*/ "accl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
+            /*Log.d(TAG,*/ ",  move(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut+")");
 //            Log.d(TAG, "seq#=" + cmd.getSeq());
-        //}
+        }
     }
 
 
@@ -265,15 +261,15 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     if(distance <= param.GOAL_RADIUS){
                         next = STAGE.GOAL;
                     }
-                    cmd.takeOff().doFor(2000);
+                    cmd.takeOff();
                     next = STAGE.TAKEOFF;
                     break;
                 case TAKEOFF:
-//                    try {
-//                        sleep(300, 0);
-//                    } catch (Exception exc){
-//                        exc.printStackTrace();
-//                    }
+                    try {
+                        sleep(300 , 0);
+                    } catch (Exception exc){
+                        exc.printStackTrace();
+                    }
                     next = STAGE.MOVE;
                     break;
                 case MOVE:

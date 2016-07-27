@@ -65,8 +65,8 @@ public class ModelARDrone2 extends ItemPosition implements TrackedRobot{
 
     private void initHelper(){
         if(this.ipAddr==null)
-//            this.ipAddr = "192.168.1.10";
-            this.ipAddr = "10.195.40.51";
+            this.ipAddr = "192.168.1.104";
+//            this.ipAddr = "10.195.40.51";
         vX=0;
         vY=0;
         vZ=0;
