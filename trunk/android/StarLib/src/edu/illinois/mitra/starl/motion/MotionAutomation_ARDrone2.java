@@ -33,24 +33,25 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     private STAGE prev=null, next = null;
     protected STAGE stage = STAGE.INIT;
     volatile protected boolean running = false;
+    volatile protected boolean inAir = false;
     boolean colliding = false;
     private static int timecount=0;//notice: only for the test of dummyGPS
 
     //control logic related
     double saturationLimit = 10;
-    double windUpLimit = 30;
+    double windUpLimit = 50;
     int filterLength = 2;
-    double Kpx = 0.0007414669809792096;
-    double Kpy = 0.0007414669809792096;
+    double Kpx = 0.0020;
+    double Kpy = 0.0020;
     double Kpyaw = 0.15;
     double Kix = 0;
     double Kiy = 0;
-    double Kdx = 0.000663205037832174;
-    double Kdy = 0.000663205037832174;
+    double Kdx = -0.0031;//notice: last working -0.0028
+    double Kdy = -0.0031;
     double Kdyaw = -0.15;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
     PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
-    PIDController PID_yaw = new PIDController(Kpyaw, 0, Kdyaw, 0.3, 0.3, 1);
+    PIDController PID_yaw = new PIDController(Kpyaw, 0, Kdyaw, 0.3, 5, 1);
 
 
     //=========================hardware related==========================
@@ -77,8 +78,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         public void batteryLevelChanged(int var1){
             if(var1<20)
                 Log.e(TAG, "Low battery:"+var1+"%" + "         Low battery:"+var1+"%");
-            else if(var1 % 10 == 0)
-                Log.e(TAG, "Battery:"+var1+"%" + "        Battery:"+var1+"%");
+//            else if(var1 % 10 == 0)
+//                Log.e(TAG, "Battery:"+var1+"%" + "        Battery:"+var1+"%");
         }
         public void voltageChanged(int var1){;}
     }
@@ -228,7 +229,13 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         //to commands==============================================
         //notice: neg const since contradiction between direction of drone's movement and positive yaw direction===
 //        spinVOut = -0.09 * (yawOut - Math.toRadians(mypos.currYaw));
-        spinVOut = -PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
+        if( Math.abs(180 - (mypos.currYaw - Math.toDegrees(yawOut))) < 40 )
+        {
+            spinVOut = 0.15;
+            PID_yaw.reset();
+        }
+        else
+            spinVOut = -PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
         if( Math.abs( mypos.currYaw - Math.toDegrees(yawOut) ) > 20 ){
             rollOut = 0;
             pitchOut = 0;
@@ -267,7 +274,10 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     next = STAGE.TAKEOFF;
                     break;
                 case TAKEOFF:
-                    cmd.takeOff();
+                    if(!inAir) {
+                        cmd.takeOff();
+                        inAir = true;
+                    }
                     try {
                         sleep(300 , 0);
                     } catch (Exception exc){
@@ -311,6 +321,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     }
                     running = false;
                     inMotion = false;
+                    inAir = false;
                     break;
 
             }
