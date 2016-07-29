@@ -42,7 +42,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     int filterLength = 2;
     double Kpx = 0.0007414669809792096;
     double Kpy = 0.0007414669809792096;
-    double Kpyaw = 0.11;
+    double Kpyaw = 0.15;
     double Kix = 0;
     double Kiy = 0;
     double Kdx = 0.000663205037832174;
@@ -185,12 +185,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             Log.e(TAG, "dest is null");
             return Math.sqrt(Math.pow((mypos.x - 0), 2) + Math.pow((mypos.y - 0), 2));
         }
-        timecount++;
-        if(timecount>=10000){
-            timecount = 0;
-            Log.i(TAG, "dist=0");
-            return 0;
-        }
+//        timecount++;
+//        if(timecount>=5000){
+//            timecount = 0;
+//            Log.i(TAG, "dist=0");
+//            return 0;
+//        }
         return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
     }
     private double ScaleByLimit(double in, double absLimit){
@@ -234,7 +234,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             pitchOut = 0;
             vertVOut = 0;
         }
-//        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
+        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(2);
         if(!oldpos.equals(mypos.x, mypos.y)) {
             oldpos.set(mypos.x, mypos.y);
             Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
@@ -259,7 +259,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             double distance = 0;
             if(colliding) continue;
             mypos = (ModelARDrone2) gvh.gps.getMyPosition();
-            if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF) {
+            if(stage==STAGE.MOVE) {
                 distance = getDistance();
             }
             switch (stage){
