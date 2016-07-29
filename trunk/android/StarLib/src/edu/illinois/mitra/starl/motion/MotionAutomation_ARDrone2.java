@@ -34,7 +34,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     protected STAGE stage = STAGE.INIT;
     volatile protected boolean running = false;
     boolean colliding = false;
-    private static int timecount;//notice: only for the test of dummyGPS
+    private static int timecount=0;//notice: only for the test of dummyGPS
 
     //control logic related
     double saturationLimit = 10;
@@ -42,12 +42,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     int filterLength = 2;
     double Kpx = 0.0007414669809792096;
     double Kpy = 0.0007414669809792096;
-    double Kpyaw = 0.08;
+    double Kpyaw = 0.11;
     double Kix = 0;
     double Kiy = 0;
     double Kdx = 0.000663205037832174;
     double Kdy = 0.000663205037832174;
-    double Kdyaw = 0.12;
+    double Kdyaw = -0.15;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
     PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
     PIDController PID_yaw = new PIDController(Kpyaw, 0, Kdyaw, 0.3, 0.3, 1);
@@ -150,23 +150,23 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             done = false;
             this.dest = new ItemPosition(dest.name,dest.x,dest.y,dest.z);
             motionStart();
-            Log.i("Automation ARDrone2", "GoTo Executed!!!");
+            Log.i("Automation ARDrone2", "GoTo Executed!!!, new dest("+dest.x+","+dest.y+","+dest.z+")");
+            running = true;
         }
     }
 
     //====================================================
     //fixme: this three func seems like need some commands toward the HW, but not sure yet.
     private void motionStart(){
-        running = true;
         stage = STAGE.INIT;
+        next = STAGE.INIT;
         inMotion = true;
     }
 
     @Override
     public void motion_stop() {
         stage = STAGE.LAND;
-        this.dest = null;
-        running = false;
+        next = STAGE.LAND;
         inMotion = false;
     }
 
@@ -184,6 +184,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         if(dest==null) {
             Log.e(TAG, "dest is null");
             return Math.sqrt(Math.pow((mypos.x - 0), 2) + Math.pow((mypos.y - 0), 2));
+        }
+        timecount++;
+        if(timecount>=10000){
+            timecount = 0;
+            Log.i(TAG, "dist=0");
+            return 0;
         }
         return Math.sqrt(Math.pow((mypos.x - dest.x), 2) + Math.pow((mypos.y - dest.y), 2));
     }
@@ -210,7 +216,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         double desiredAccY = PID_y.getCommand(mypos.y, dest.y);
         double rollOut, pitchOut, vertVOut=0, yawOut, spinVOut;
         //calculations================================================
-        pitchOut =  Math.asin(MURatio * (desiredAccY * Math.cos(Math.toRadians(mypos.currYaw)) -
+        pitchOut = -Math.asin(MURatio * (desiredAccY * Math.cos(Math.toRadians(mypos.currYaw)) -
                                 desiredAccX * Math.sin(Math.toRadians(mypos.currYaw))) );
         rollOut = Math.asin(-MURatio * (desiredAccY * Math.sin(Math.toRadians(mypos.currYaw )) +
                                 desiredAccX * Math.cos( Math.toRadians(mypos.currYaw))) );
@@ -223,18 +229,18 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         //notice: neg const since contradiction between direction of drone's movement and positive yaw direction===
 //        spinVOut = -0.09 * (yawOut - Math.toRadians(mypos.currYaw));
         spinVOut = -PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
-//        if( Math.abs(yawOut) >= Math.toRadians(30) ){
+        if( Math.abs( mypos.currYaw - Math.toDegrees(yawOut) ) > 20 ){
             rollOut = 0;
             pitchOut = 0;
             vertVOut = 0;
-//        }
-        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
+        }
+//        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
         if(!oldpos.equals(mypos.x, mypos.y)) {
             oldpos.set(mypos.x, mypos.y);
             Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
-                    + dest.x + "," + dest.y + "," + dest.z + ")  " + mypos.currYaw +"->" + (int) Math.toDegrees(yawOut)+"deg   " + //);
-            /*Log.i(TAG,*/ "accl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
-            /*Log.d(TAG,*/ ",  move(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut+")");
+                    + dest.x + "," + dest.y + "," + dest.z + ")  " + (int)mypos.currYaw +"->" + (int)Math.toDegrees(yawOut)+"deg" + //);
+            /*Log.i(TAG,*/ "\taccl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
+            /*Log.d(TAG,*/ "  \tmove(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut+")");
 //            Log.d(TAG, "seq#=" + cmd.getSeq());
         }
     }
@@ -245,7 +251,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         super.run();
         gvh.threadCreated(this);
         while(true){
-            if(!running){
+            if(!inMotion){
                 //Log.i("Automation ARDrone2", "Thread running, but skipping");
                 continue;
             }
@@ -258,13 +264,10 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             }
             switch (stage){
                 case INIT:
-                    if(distance <= param.GOAL_RADIUS){
-                        next = STAGE.GOAL;
-                    }
-                    cmd.takeOff();
                     next = STAGE.TAKEOFF;
                     break;
                 case TAKEOFF:
+                    cmd.takeOff();
                     try {
                         sleep(300 , 0);
                     } catch (Exception exc){
@@ -281,11 +284,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     }
                     else {
                         this.CalculatedMove();
-//                        float rollCommand = (float)PID_x.getCommand(mypos.x, dest.x);
-//                        float pitchCommand = (float)PID_y.getCommand(mypos.y, dest.y);
-//                        float vertSpeed= 0;
-//                        float spinSpeed= 0;
-//                        cmd.move(rollCommand, pitchCommand, vertSpeed, spinSpeed).doFor(1);
                         next = STAGE.MOVE;
                     }
                     break;
