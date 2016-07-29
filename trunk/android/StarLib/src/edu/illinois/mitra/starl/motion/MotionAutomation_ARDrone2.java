@@ -28,11 +28,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     private ModelARDrone2 mypos = null;
 
     protected enum STAGE{
-        INIT, CONTINUE, MOVE, HOVER, LAND, GOAL, STOP
+        INIT, MOVE, HOVER, TAKEOFF, LAND, GOAL, STOP
     }
     private STAGE prev=null, next = null;
-    volatile protected STAGE stage = STAGE.STOP;
+    protected STAGE stage = STAGE.INIT;
     volatile protected boolean running = false;
+    boolean colliding = false;
     private static int timecount=0;//notice: only for the test of dummyGPS
 
     //control logic related
@@ -166,7 +167,6 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     public void motion_stop() {
         stage = STAGE.LAND;
         next = STAGE.LAND;
-        running = false;
         inMotion = false;
     }
 
@@ -234,7 +234,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             pitchOut = 0;
             vertVOut = 0;
         }
-        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
+//        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
         if(!oldpos.equals(mypos.x, mypos.y)) {
             oldpos.set(mypos.x, mypos.y);
             Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
@@ -246,23 +246,27 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     }
 
 
-    double distance = 0;
     @Override
     public void run(){
         super.run();
         gvh.threadCreated(this);
         while(true){
-            if(!inMotion || !running){
+            if(!inMotion){
                 //Log.i("Automation ARDrone2", "Thread running, but skipping");
                 continue;
             }
+            //Log.i("Automation ARDrone2", "Thread running, with state "+ StageToString(stage));
+            double distance = 0;
+            if(colliding) continue;
             mypos = (ModelARDrone2) gvh.gps.getMyPosition();
-//            if( stage!=STAGE.INIT && stage != STAGE.STOP ) {
-            if( stage == STAGE.MOVE ) {
+            if(stage!=STAGE.INIT && stage != STAGE.TAKEOFF) {
                 distance = getDistance();
             }
             switch (stage){
                 case INIT:
+                    next = STAGE.TAKEOFF;
+                    break;
+                case TAKEOFF:
                     cmd.takeOff();
                     try {
                         sleep(300 , 0);
@@ -272,31 +276,41 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     next = STAGE.MOVE;
                     break;
                 case MOVE:
-                    if(distance<=param.GOAL_RADIUS){
+                    inMotion = true;
+//                    if(mypos.z < safeHeight)
+//                        cmd.move(0, 0, 1, 0).doFor(1);
+                    if(distance <= param.GOAL_RADIUS){ //notice: only for current demos
                         next = STAGE.GOAL;
                     }
-                    else{
+                    else {
                         this.CalculatedMove();
+                        next = STAGE.MOVE;
                     }
                     break;
                 case HOVER:
-                    cmd.hover().doFor(300);
+                    cmd.hover();
+                    next = STAGE.HOVER;
                     inMotion = false;
                     break;
                 case GOAL:
                     done = true;
-                    gvh.log.i(TAG, "At goal!===========At goal! At goal!===========At goal!");
+                    gvh.log.i(TAG, "At goal!");
                     gvh.log.i("DoneFlag", "write");
                     if(param.STOP_AT_DESTINATION)
                         next = STAGE.HOVER;
+                    else
+                        next = STAGE.LAND;
+                    inMotion = false;
                     break;
                 case LAND:
                     cmd.landing();
                     try {
-                        sleep(4000, 0);
+                        sleep(300, 0);
                     } catch (Exception exc){
                         exc.printStackTrace();
                     }
+                    running = false;
+                    inMotion = false;
                     break;
 
             }
@@ -314,8 +328,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                 return "MOVE";
             case HOVER:
                 return "HOVER";
-            case CONTINUE:
-                return "CONTINUE";
+            case TAKEOFF:
+                return "TAKEOFF";
             case LAND:
                 return "LAND";
             case GOAL:
