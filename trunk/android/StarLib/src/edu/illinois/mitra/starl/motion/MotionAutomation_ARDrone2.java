@@ -41,13 +41,13 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     double saturationLimit = 10;
     double windUpLimit = 50;
     int filterLength = 2;
-    double Kpx = 0.0020;
-    double Kpy = 0.0020;
+    double Kpx = 0.0016;
+    double Kpy = 0.0016;
     double Kpyaw = 0.15;
     double Kix = 0;
     double Kiy = 0;
-    double Kdx = -0.0031;//notice: last working -0.0028
-    double Kdy = -0.0031;
+    double Kdx = -0.0035;//notice: last working -0.0028
+    double Kdy = -0.0035;
     double Kdyaw = -0.15;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
     PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
@@ -229,10 +229,13 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         //to commands==============================================
         //notice: neg const since contradiction between direction of drone's movement and positive yaw direction===
 //        spinVOut = -0.09 * (yawOut - Math.toRadians(mypos.currYaw));
-        if( Math.abs(180 - (mypos.currYaw - Math.toDegrees(yawOut))) < 40 )
-        {
-            spinVOut = 0.15;
-            PID_yaw.reset();
+        double yawdif = yawOut - mypos.currYaw;
+        if(yawdif>=Math.PI && yawdif<=2*Math.PI)
+            yawdif-=(2*Math.PI);
+        else if(yawdif>=-2*Math.PI && yawdif<=-Math.PI)
+            yawdif+=(2*Math.PI);
+        if( Math.abs(180 - Math.abs(mypos.currYaw - Math.toDegrees(yawOut))) < 30 ) {
+            spinVOut = Math.signum(-mypos.currYaw + Math.toDegrees(yawOut)) * PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
         }
         else
             spinVOut = -PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
