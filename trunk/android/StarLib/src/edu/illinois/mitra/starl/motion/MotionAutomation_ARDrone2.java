@@ -97,8 +97,8 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             nav.addAttitudeListener(new ARDrone2_AttitudeListn(mypos.name));
             nav.addBatteryListener(new ARDrone2_BatteryListn());
             droneInstance.setSpeed(maxSpeed);
-            cmd.setMaxAltitude(1200);
-            cmd.setMinAltitude(50);
+            cmd.setMaxAltitude(400);
+            cmd.setMinAltitude(70);
             cmd.setLedsAnimation(LEDAnimation.BLINK_ORANGE, 3, 10);//some sig for us
         }catch (Exception exc)
         {
@@ -210,12 +210,13 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     }
 
     static Point oldpos = new Point(19381,-238482); //a random impossible starting place
+    double desiredAccX = 0;
+    double desiredAccY = 0;
+    double rollOut, pitchOut, vertVOut=0, yawOut, spinVOut;
+    final double MURatio = 0.0485;
     private void CalculatedMove(){
-        double MURatio = 0.0485;
-        //change axis to adapt to the paper.
-        double desiredAccX = PID_x.getCommand(mypos.x, dest.x);
-        double desiredAccY = PID_y.getCommand(mypos.y, dest.y);
-        double rollOut, pitchOut, vertVOut=0, yawOut, spinVOut;
+        desiredAccX = PID_x.getCommand(mypos.x, dest.x);
+        desiredAccY = PID_y.getCommand(mypos.y, dest.y);
         //calculations================================================
         pitchOut = -Math.asin(MURatio * (desiredAccY * Math.cos(Math.toRadians(mypos.currYaw)) -
                                 desiredAccX * Math.sin(Math.toRadians(mypos.currYaw))) );
@@ -229,30 +230,25 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         //to commands==============================================
         //notice: neg const since contradiction between direction of drone's movement and positive yaw direction===
 //        spinVOut = -0.09 * (yawOut - Math.toRadians(mypos.currYaw));
-        double yawdif = yawOut - mypos.currYaw;
+        double yawdif = yawOut - Math.toRadians(mypos.currYaw);
         if(yawdif>=Math.PI && yawdif<=2*Math.PI)
             yawdif-=(2*Math.PI);
         else if(yawdif>=-2*Math.PI && yawdif<=-Math.PI)
             yawdif+=(2*Math.PI);
-        if( Math.abs(180 - Math.abs(mypos.currYaw - Math.toDegrees(yawOut))) < 30 ) {
-            spinVOut = Math.signum(-mypos.currYaw + Math.toDegrees(yawOut)) * PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
-        }
-        else
-            spinVOut = -PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
-        if( Math.abs( mypos.currYaw - Math.toDegrees(yawOut) ) > 20 ){
-            rollOut = 0;
-            pitchOut = 0;
-            vertVOut = 0;
-        }
-        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(2);
-        if(!oldpos.equals(mypos.x, mypos.y)) {
-            oldpos.set(mypos.x, mypos.y);
-            Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
-                    + dest.x + "," + dest.y + "," + dest.z + ")  " + (int)mypos.currYaw +"->" + (int)Math.toDegrees(yawOut)+"deg" + //);
-            /*Log.i(TAG,*/ "\taccl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
-            /*Log.d(TAG,*/ "  \tmove(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut+")");
-//            Log.d(TAG, "seq#=" + cmd.getSeq());
-        }
+//        if( Math.abs(180 - Math.abs(mypos.currYaw - Math.toDegrees(yawOut))) < 30 ) {
+//            spinVOut = Math.signum(-mypos.currYaw + Math.toDegrees(yawOut)) * PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
+//        }
+//        else
+//            spinVOut = -PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
+//        spinVOut = -PID_yaw.getCommand(0, yawdif);
+//        if( Math.abs( mypos.currYaw - Math.toDegrees(yawOut) ) > 10){
+//            rollOut = 0;
+//            pitchOut = 0;
+//            vertVOut = 0;
+//        }
+//        else
+            spinVOut = 0;
+        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
     }
 
 
@@ -271,6 +267,16 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             mypos = (ModelARDrone2) gvh.gps.getMyPosition();
             if(stage==STAGE.MOVE) {
                 distance = getDistance();
+            }
+            if(mypos==null || dest==null)
+                Log.d(TAG, "["+StageToString(stage)+"]");
+            else if(!oldpos.equals(mypos.x, mypos.y)) {
+                oldpos.set(mypos.x, mypos.y);
+                Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
+                        + dest.x + "," + dest.y + "," + dest.z + ")  " + (int)mypos.currYaw +"->" + (int)Math.toDegrees(yawOut)+"deg" + //);
+            /*Log.i(TAG,*/ "\taccl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
+            /*Log.d(TAG,*/ "  \tmove(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut +")");
+//            Log.d(TAG, "seq#=" + cmd.getSeq());
             }
             switch (stage){
                 case INIT:

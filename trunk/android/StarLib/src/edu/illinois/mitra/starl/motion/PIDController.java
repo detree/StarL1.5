@@ -86,7 +86,7 @@ public class PIDController {
             cumError = -windUpLimit;
         }
         // calculated command
-        double command = (Kp * error) + (Ki * cumError * deltaTimeDouble) + (Kd * filtDeltaError * (1/deltaTimeDouble));
+        double command = (Kp * error) + (Ki * error * deltaTimeDouble) + (Kd * filtDeltaError * (1/deltaTimeDouble));
         // limit command value if needed
         if(command > saturationLimit) {
             command = saturationLimit;
