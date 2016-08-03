@@ -38,16 +38,16 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     private static int timecount=0;//notice: only for the test of dummyGPS
 
     //control logic related
-    double saturationLimit = 10;
+    double saturationLimit = 8;
     double windUpLimit = 50;
     int filterLength = 2;
-    double Kpx = 0.0016;
-    double Kpy = 0.0016;
+    double Kpx = 0.0013;
+    double Kpy = 0.0013;
     double Kpyaw = 0.15;
     double Kix = 0;
     double Kiy = 0;
-    double Kdx = -0.0035;//notice: last working -0.0028
-    double Kdy = -0.0035;
+    double Kdx = -0.0030;//notice: last working -0.0028
+    double Kdy = -0.0030;
     double Kdyaw = -0.15;
     PIDController PID_x = new PIDController(Kpx, Kix, Kdx, saturationLimit, windUpLimit, filterLength);
     PIDController PID_y = new PIDController(Kpy, Kiy, Kdy, saturationLimit, windUpLimit, filterLength);
@@ -240,13 +240,13 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
 //        }
 //        else
 //            spinVOut = -PID_yaw.getCommand(Math.toRadians(mypos.currYaw), yawOut);
-//        spinVOut = -PID_yaw.getCommand(0, yawdif);
-//        if( Math.abs( mypos.currYaw - Math.toDegrees(yawOut) ) > 10){
-//            rollOut = 0;
-//            pitchOut = 0;
-//            vertVOut = 0;
-//        }
-//        else
+        spinVOut = -PID_yaw.getCommand(0, yawdif);
+        if( Math.abs( mypos.currYaw - Math.toDegrees(yawOut) ) > 10){
+            rollOut = 0;
+            pitchOut = 0;
+            vertVOut = 0;
+        }
+        else
             spinVOut = 0;
         cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
     }
@@ -286,11 +286,11 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     if(!inAir) {
                         cmd.takeOff();
                         inAir = true;
-                    }
-                    try {
-                        sleep(300 , 0);
-                    } catch (Exception exc){
-                        exc.printStackTrace();
+                        try {
+                            sleep(5000 , 0);
+                        } catch (Exception exc){
+                            exc.printStackTrace();
+                        }
                     }
                     next = STAGE.MOVE;
                     break;
@@ -308,17 +308,22 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
                     break;
                 case HOVER:
                     cmd.hover();
-                    next = STAGE.HOVER;
                     inMotion = false;
+                    try {
+                        sleep(5000 , 0);
+                    } catch (Exception exc){
+                        exc.printStackTrace();
+                    }
+                    next = STAGE.HOVER;
                     break;
                 case GOAL:
-                    done = true;
                     gvh.log.i(TAG, "At goal!");
                     gvh.log.i("DoneFlag", "write");
                     if(param.STOP_AT_DESTINATION)
                         next = STAGE.HOVER;
                     else
                         next = STAGE.LAND;
+                    done = true;
                     inMotion = false;
                     break;
                 case LAND:
