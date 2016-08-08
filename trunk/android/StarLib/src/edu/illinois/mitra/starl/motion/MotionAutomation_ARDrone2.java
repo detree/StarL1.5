@@ -197,7 +197,9 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     }
 
     private void transBackUDP(){
-        String transData = mypos.name + "|" + Integer.toString(mypos.x) + "|" + Integer.toString(mypos.y) + "|" + Integer.toString((int)mypos.currYaw) + "|" + Integer.toString(dest.x) + "|" + Integer.toString(dest.y) ;
+        String transData = mypos.name + "|" + Integer.toString(mypos.x) + "|" + Integer.toString(mypos.y) + "|"
+                + Integer.toString((int)mypos.currYaw) + "|" + Integer.toString(dest.x) + "|"
+                + Integer.toString(dest.y) + "|";
         byte[] buf = transData.getBytes();
         DatagramPacket packet = new DatagramPacket(buf, buf.length,
                 transBackAddr, SERVERPORT);
