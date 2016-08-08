@@ -3,6 +3,10 @@ package edu.illinois.mitra.starl.motion;
 import android.graphics.Point;
 import android.util.Log;
 
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.IARDrone;
 import de.yadrone.base.command.CommandManager;
@@ -104,6 +108,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         {
             exc.printStackTrace();
         }
+        transBackUDPInit();
     }
     //====================================================
     @Override
@@ -174,6 +179,35 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     @Override
     public void motion_resume() {
         running = true;
+    }
+
+    //=======================Data Transfer Back to Host PC============================= notice:temporary put in here
+    public static final String SERVERIP = "192.168.0.106";
+    public static final int SERVERPORT = 9876;
+    DatagramSocket transBackSocket;
+    InetAddress transBackAddr;
+    private void transBackUDPInit(){
+        try {
+            transBackAddr = InetAddress.getByName(SERVERIP);
+            Log.i(TAG, "Client: Start connecting\n");
+            transBackSocket = new DatagramSocket(SERVERPORT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void transBackUDP(){
+        String transData = mypos.name + "|" + Integer.toString(mypos.x) + "|" + Integer.toString(mypos.y) + "|" + Integer.toString((int)mypos.currYaw) + "|" + Integer.toString(dest.x) + "|" + Integer.toString(dest.y) ;
+        byte[] buf = transData.getBytes();
+        DatagramPacket packet = new DatagramPacket(buf, buf.length,
+                transBackAddr, SERVERPORT);
+        System.out.println("Client: Sending ‘" +  new String(buf)
+                + "’\n");
+        try {
+            transBackSocket.send(packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //=======================private helpers=============================
@@ -248,7 +282,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         }
         else
             spinVOut = 0;
-        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
+//        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
     }
 
 
@@ -270,13 +304,13 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             }
             if(mypos==null || dest==null)
                 Log.d(TAG, "["+StageToString(stage)+"]");
-            else if(!oldpos.equals(mypos.x, mypos.y)) {
-                oldpos.set(mypos.x, mypos.y);
-                Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
-                        + dest.x + "," + dest.y + "," + dest.z + ")  " + (int)mypos.currYaw +"->" + (int)Math.toDegrees(yawOut)+"deg" + //);
-            /*Log.i(TAG,*/ "\taccl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
-            /*Log.d(TAG,*/ "  \tmove(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut +")");
-//            Log.d(TAG, "seq#=" + cmd.getSeq());
+            else{ //if(!oldpos.equals(mypos.x, mypos.y)) {
+//                oldpos.set(mypos.x, mypos.y);
+//                Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
+//                        + dest.x + "," + dest.y + "," + dest.z + ")  " + (int)mypos.currYaw +"->" + (int)Math.toDegrees(yawOut)+"deg" + //);
+//                        "\taccl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
+//                        "  \tmove(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut +")");
+                transBackUDP();
             }
             switch (stage){
                 case INIT:
