@@ -23,7 +23,7 @@ public class mainClass {
 	DatagramSocket dataIn;
 	DatagramPacket receivePacket;
 	byte[] recvBuf = new byte[200];  //buffer for recieving the data
-	int corner[][] = {{-2000,2000},{2000,2000},{-2000,-2000},{2000,-2000}};
+	int corner[][] = {{-3000,3000},{3000,3000},{-3000,-3000},{3000,-3000}};
 	double fieldW = corner[1][0]-corner[0][0], fieldH = corner[0][1]- corner[2][1];
 	double screenW=1200, screenH=800;
 	
@@ -64,21 +64,23 @@ public class mainClass {
 		int x = 150, y = 50, r = 15; // Position and radius of the circle
 		double yaw = 0;				// in RAD!!
 		int destx = 0, desty = 0, destr=5;
+		String outInfo;
 
 		public TestPane() {
-			Timer timer = new Timer(50, new ActionListener() {
+			Timer timer = new Timer(1, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
 						dataIn.receive(receivePacket);
 						String sentence = new String( receivePacket.getData() );
-						System.out.println(sentence);
-						String[] parts = sentence.replace(",", "").split("\\|");
+						//System.out.println(sentence);
+						String[] parts = sentence.split("\\|");
 						x = Integer.parseInt(parts[1]);
 						y = Integer.parseInt(parts[2]);
 						yaw = Math.toRadians(Integer.parseInt(parts[3]));
 						destx = Integer.parseInt(parts[4]);
 						desty = Integer.parseInt(parts[5]);
+						outInfo = parts[6];
 						
 						repaint();
 					} catch (IOException e1) {
@@ -105,6 +107,7 @@ public class mainClass {
 			g.fillOval(relaX - r, relaY - r, r * 2, r * 2);
 			g.setColor(Color.black);
 			g.drawLine(relaX - (int)(r*Math.sin(yaw)), relaY - (int)(r*Math.cos(yaw)), relaX, relaY);
+			g.drawString(outInfo, relaX-outInfo.length()*3, relaY-(int)(r*1.2));
 
 			g.setColor(Color.blue);
 			relaX = destx - corner[0][0];

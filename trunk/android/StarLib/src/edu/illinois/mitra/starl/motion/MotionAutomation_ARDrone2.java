@@ -182,7 +182,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     }
 
     //=======================Data Transfer Back to Host PC============================= notice:temporary put in here
-    public static final String SERVERIP = "192.168.0.106";
+    public static final String SERVERIP = "192.168.1.104";
     public static final int SERVERPORT = 9876;
     DatagramSocket transBackSocket;
     InetAddress transBackAddr;
@@ -196,10 +196,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         }
     }
 
+    long dura;
     private void transBackUDP(){
         String transData = mypos.name + "|" + Integer.toString(mypos.x) + "|" + Integer.toString(mypos.y) + "|"
                 + Integer.toString((int)mypos.currYaw) + "|" + Integer.toString(dest.x) + "|"
-                + Integer.toString(dest.y) + "|";
+                + Integer.toString(dest.y) + "|(" + (float)rollOut +", " + (float)pitchOut + ", "
+                + (float)vertVOut + ", " + (float)spinVOut + ")|";
         byte[] buf = transData.getBytes();
         DatagramPacket packet = new DatagramPacket(buf, buf.length,
                 transBackAddr, SERVERPORT);
@@ -284,7 +286,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         }
         else
             spinVOut = 0;
-//        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
+        cmd.move((float)rollOut, (float)pitchOut, (float)vertVOut, (float)spinVOut).doFor(1);
     }
 
 
@@ -306,12 +308,12 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
             }
             if(mypos==null || dest==null)
                 Log.d(TAG, "["+StageToString(stage)+"]");
-            else{ //if(!oldpos.equals(mypos.x, mypos.y)) {
-//                oldpos.set(mypos.x, mypos.y);
-//                Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
-//                        + dest.x + "," + dest.y + "," + dest.z + ")  " + (int)mypos.currYaw +"->" + (int)Math.toDegrees(yawOut)+"deg" + //);
-//                        "\taccl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
-//                        "  \tmove(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut +")");
+            else if(!oldpos.equals(mypos.x, mypos.y)) {
+                oldpos.set(mypos.x, mypos.y);
+                Log.d(TAG, "["+StageToString(stage)+"] ("+mypos.x+","+mypos.y+","+mypos.z+")->("
+                        + dest.x + "," + dest.y + "," + dest.z + ")  " + (int)mypos.currYaw +"->" + (int)Math.toDegrees(yawOut)+"deg" + //);
+                        "\taccl=" + (float) desiredAccX + ", " + (float) desiredAccY +//);
+                        "  \tmove(" + (float)rollOut + ", " + (float)pitchOut+ ", " + (float)vertVOut+ ", " + (float)spinVOut +")");
                 transBackUDP();
             }
             switch (stage){
