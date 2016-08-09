@@ -19,6 +19,7 @@ trunk/android/**/.signing
 trunk/android/**/.idea/libraries/**
 trunk/android/**/.idea/workspace.xml
 trunk/android/**/.idea/tasks.xml
+trunk/tools/**/.idea/
 #.idea/.name
 #.idea/compiler.xml
 #.idea/copyright/profiles_settings.xml
@@ -45,5 +46,6 @@ Thumbs.db
 trunk/android/.idea/workspace.xml
 
 *.o
-
 *.out
+*.class
+
