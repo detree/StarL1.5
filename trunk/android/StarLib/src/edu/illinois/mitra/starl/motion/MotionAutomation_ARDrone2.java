@@ -47,7 +47,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
     int filterLength = 2;
     double Kpx = 0.0013;
     double Kpy = 0.0013;
-    double Kpyaw = 0.15;
+    double Kpyaw = 0.16;
     double Kix = 0;
     double Kiy = 0;
     double Kdx = -0.0030;//notice: last working -0.0028
@@ -205,8 +205,7 @@ public class MotionAutomation_ARDrone2 extends RobotMotion {
         byte[] buf = transData.getBytes();
         DatagramPacket packet = new DatagramPacket(buf, buf.length,
                 transBackAddr, SERVERPORT);
-        System.out.println("Client: Sending ‘" +  new String(buf)
-                + "’\n");
+//        System.out.println("Client: Sending ‘" +  new String(buf) + "’\n");
         try {
             transBackSocket.send(packet);
         } catch (Exception e) {

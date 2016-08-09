@@ -23,7 +23,7 @@ public class mainClass {
 	DatagramSocket dataIn;
 	DatagramPacket receivePacket;
 	byte[] recvBuf = new byte[200];  //buffer for recieving the data
-	int corner[][] = {{-3000,3000},{3000,3000},{-3000,-3000},{3000,-3000}};
+	int corner[][] = {{-3300,3000},{3500,3000},{-3300,-3000},{3500,-3000}};
 	double fieldW = corner[1][0]-corner[0][0], fieldH = corner[0][1]- corner[2][1];
 	double screenW=1200, screenH=800;
 	
@@ -36,6 +36,8 @@ public class mainClass {
 		try {
 			receivePacket = new DatagramPacket(recvBuf, recvBuf.length);
 			dataIn = new DatagramSocket(9876);
+			dataIn.setReceiveBufferSize(100);
+			System.out.println("recv buf="+ dataIn.getReceiveBufferSize());
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -67,7 +69,7 @@ public class mainClass {
 		String outInfo;
 
 		public TestPane() {
-			Timer timer = new Timer(1, new ActionListener() {
+			Timer timer = new Timer(50, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
